@@ -1,4 +1,4 @@
-@import 'variables';
+@import "variables";
 
 .form-control {
   border-color: $grey;
@@ -12,9 +12,10 @@
 
 .form-text {
   margin-top: 0;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
-.btn-primary:focus, .btn-primary.focus {
+.btn-primary:focus,
+.btn-primary.focus {
   box-shadow: none;
 }

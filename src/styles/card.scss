@@ -1,9 +1,9 @@
-@import 'variables';
+@import "variables";
 
 .card {
   margin-bottom: 1.5rem;
   border-color: #edf2f9;
-  box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, .03);
+  box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
 }
 
 .card-header {
@@ -28,7 +28,7 @@
 
 .card-table thead th {
   color: $dark;
-  font-size: .9375rem;
+  font-size: 0.9375rem;
   font-weight: 700;
   border: none;
 }
@@ -42,7 +42,7 @@
 
 .card-header + .card-table th {
   color: $grey-dark;
-  font-size: .625rem;
+  font-size: 0.625rem;
   background: $grey-light;
 }
 
@@ -56,6 +56,6 @@
 }
 
 .card-table .table-hover tbody tr:hover {
-  transition: all .3s, height 0s;
+  transition: all 0.3s, height 0s;
   background: $grey-light;
 }

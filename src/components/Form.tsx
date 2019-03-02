@@ -6,7 +6,7 @@ interface IProps {
 }
 
 export default ({ onSubmit, children }: IProps) => (
-  <form onSubmit={onSubmit} className={"mb-5"}>
+  <form onSubmit={onSubmit} className="mb-5">
     {children}
   </form>
 )

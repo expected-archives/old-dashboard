@@ -3,6 +3,7 @@ import React, { ReactNode } from "react"
 interface IColumn {
   title: string
   key: string
+  align?: "left" | "center" | "right"
   render?: (data: any) => ReactNode
 }
 
@@ -14,7 +15,7 @@ interface IProps<T> {
 }
 
 // prettier-ignore
-export default <T,>({ title, onRowClick, dataSource, columns }: IProps<T>) => {
+export default <T, >({ title, onRowClick, dataSource, columns }: IProps<T>) => {
   const onClick = (data: T) => () => {
     if (onRowClick) {
       onRowClick(data)
@@ -22,26 +23,32 @@ export default <T,>({ title, onRowClick, dataSource, columns }: IProps<T>) => {
   }
 
   return (
-    <div className={"card"}>
+    <div className="card">
       {title && (
-        <div className={"card-header"}>
-          <h4>{title}</h4>
+        <div className="card-header">
+          <h4>
+            {title}
+          </h4>
         </div>
       )}
-      <div className={"card-table table-responsive"}>
-        <table className={"table table-hover"}>
+      <div className="card-table table-responsive">
+        <table className="table table-hover">
           <thead>
             <tr>
-              {columns.map(({ title: columnTitle }, index) => (
-                <th key={index}>{columnTitle}</th>
+              {columns.map(({ title: columnTitle, align }, index) => (
+                <th key={index} align={align || "left"}>
+                  {columnTitle}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {dataSource.map((data: any, dIndex) => (
-              <tr key={dIndex} onClick={onClick(data)}>
-                {columns.map(({ key, render }, cIndex) => (
-                  <td key={cIndex}>{render ? render(data[key]) : data[key]}</td>
+            {dataSource.map((data: any, index) => (
+              <tr key={index} onClick={onClick(data)}>
+                {columns.map(({ key, align, render }, index) => (
+                  <td key={index} align={align || "left"}>
+                    {render ? render(data[key]) : data[key]}
+                  </td>
                 ))}
               </tr>
             ))}

@@ -1,13 +1,14 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import TimeAgo from "react-timeago"
-import { fetchContainers, IContainer } from "../client"
+import { containers } from "../client"
 import { Header, TableCard } from "../components"
 
-interface IProps {}
+interface IProps {
+}
 
 interface IState {
-  containers: IContainer[]
+  containers: containers.Container[]
 }
 
 export default class ListContainer extends Component<IProps, IState> {
@@ -17,25 +18,41 @@ export default class ListContainer extends Component<IProps, IState> {
       key: "name",
     },
     {
-      title: "Endpoint",
-      key: "endpoint",
+      title: "Image",
+      key: "image",
     },
     {
       title: "Created",
       key: "createdAt",
-      render: (createdAt: any) => <TimeAgo date={createdAt} minPeriod={10} />,
+      render: (createdAt: any) => <TimeAgo date={createdAt} minPeriod={10}/>,
     },
     {
       title: "Tags",
       key: "tags",
       render: (tags: any) => (
-        <span>
+        <>
           {tags.map((tag: string, index: number) => (
-            <div key={index}>{tag}</div>
+            <span key={index} className="tag">{tag}</span>
           ))}
-        </span>
+        </>
       ),
     },
+    {
+      title: "",
+      key: "",
+      render: () => (
+        <div className="dropdown">
+          <button className="btn btn-link dropdown-toggle" type="button" style={{padding: 0}}>
+            More
+          </button>
+          <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a className="dropdown-item" href="#">Action</a>
+            <a className="dropdown-item" href="#">Another action</a>
+            <a className="dropdown-item" href="#">Something else here</a>
+          </div>
+        </div>
+      )
+    }
   ]
 
   constructor(props: IProps) {
@@ -47,20 +64,20 @@ export default class ListContainer extends Component<IProps, IState> {
   }
 
   public componentDidMount = () => {
-    fetchContainers()
+    containers.list()
       .then((containers) => this.setState({ containers }))
       .catch(console.error)
   }
 
   public render = () => (
     <div>
-      <Header title={"Containers"} pretitle={"Overview"}>
-        <Link to={"/containers/new"} className={"btn btn-primary"}>
+      <Header title="Containers" pretitle="Overview">
+        <Link to="/containers/new" className="btn btn-success">
           Create
         </Link>
       </Header>
 
-      <TableCard<IContainer>
+      <TableCard<containers.Container>
         columns={ListContainer.columns}
         dataSource={this.state.containers}
         onRowClick={(data) => console.log(data)}

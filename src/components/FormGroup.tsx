@@ -7,10 +7,16 @@ interface IProps {
 }
 
 export default ({ name, description, children }: IProps) => (
-  <div className={"form-group"}>
-    {name && <label>{name}</label>}
+  <div className="form-group">
+    {name && (
+      <label>
+        {name}
+      </label>
+    )}
     {description && (
-      <small className={"form-text text-muted"}>{description}</small>
+      <small className="form-text text-muted">
+        {description}
+      </small>
     )}
     {children}
   </div>

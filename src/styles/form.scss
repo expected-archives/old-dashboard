@@ -1,7 +1,12 @@
 @import "variables";
 
+label {
+  font-size: .9375rem;
+}
+
 .form-control {
   border-color: $grey;
+  font-size: .9375rem;
 }
 
 .form-control:focus {

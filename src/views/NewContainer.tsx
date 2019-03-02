@@ -1,9 +1,10 @@
 import React, { Component, FormEvent } from "react"
 import { Link } from "react-router-dom"
-import { createContainer } from "../client"
+import { containers } from "../client"
 import { Form, FormGroup, Header } from "../components"
 
-interface IProps {}
+interface IProps {
+}
 
 interface IState {
   name: string
@@ -32,23 +33,23 @@ export default class NewContainer extends Component<IProps, IState> {
     event.preventDefault()
 
     const { name, image, size, tags } = this.state
-    createContainer(name, image, size, [])
+    containers.create({ name, image, size, tags: [] })
       .then(console.log)
       .catch(console.error)
   }
 
   public render = () => (
-    <div className={"row justify-content-center"}>
-      <div className={"col-12 col-lg-10 col-xl-8"}>
-        <Header pretitle={"Containers"} title={"Create a new container"} />
+    <div className="row justify-content-center">
+      <div className="col-12 col-lg-10 col-xl-8">
+        <Header pretitle="Containers" title="Create a new container"/>
 
         <Form onSubmit={this.handleSubmit}>
-          <FormGroup name={"Name"}>
+          <FormGroup name="Name">
             <input
               type="text"
               className="form-control"
-              placeholder={"my-container"}
-              name={"name"}
+              placeholder="my-container"
+              name="name"
               onChange={this.handleChange}
             />
           </FormGroup>
@@ -57,44 +58,40 @@ export default class NewContainer extends Component<IProps, IState> {
             <input
               type="text"
               className="form-control"
-              placeholder={"nginx:latest"}
-              name={"image"}
+              placeholder="nginx:latest"
+              name="image"
               onChange={this.handleChange}
             />
           </FormGroup>
 
-          <FormGroup name={"Select a size"}>
+          <FormGroup name="Select a size">
             <select
               className="form-control"
-              name={"size"}
+              name="size"
               onChange={this.handleChange}>
-              <option value={"64"}>64mb</option>
-              <option value={"128"}>128mb</option>
-              <option value={"256"}>256mb</option>
+              <option value="64">64mb</option>
+              <option value="128">128mb</option>
+              <option value="256">256mb</option>
             </select>
           </FormGroup>
 
           <FormGroup
-            name={"Tags"}
-            description={
-              "This is how others will learn about the project, so make it good!"
-            }>
+            name="Tags"
+            description="This is how others will learn about the project, so make it good!">
             <input
               type="text"
               className="form-control"
-              name={"tags"}
+              name="tags"
               onChange={this.handleChange}
             />
           </FormGroup>
 
-          <hr className="mt-5 mb-5" />
+          <hr className="mt-5 mb-5"/>
 
-          <button className={"btn btn-block btn-primary"}>
+          <button className="btn btn-block btn-success">
             Create container
           </button>
-          <Link
-            to={"/containers"}
-            className={"btn btn-block btn-link text-muted"}>
+          <Link to="/containers" className="btn btn-block btn-link text-muted">
             Cancel
           </Link>
         </Form>

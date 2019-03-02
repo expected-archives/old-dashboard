@@ -12,16 +12,24 @@
 @import "~bootstrap/scss/card";
 @import "~bootstrap/scss/nav";
 @import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/dropdown";
 @import "~bootstrap/scss/utilities";
 @import "variables";
+@import "general";
 @import "card";
 @import "form";
 @import "header";
 @import "navbar";
 
+html {
+  position: relative;
+  min-height: 100%;
+}
+
 body {
   font-family: "Open Sans", sans-serif;
   background: $grey-light;
+  margin-bottom: 60px;
 }
 
 h1,
@@ -65,15 +73,4 @@ p {
 
 hr {
   border-color: $grey;
-}
-
-.text-muted {
-  color: $grey;
-}
-
-.content {
-  background: #fff;
-  margin-top: 64px;
-  padding: 24px;
-  min-height: 280px;
 }

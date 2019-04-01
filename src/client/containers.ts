@@ -1,4 +1,4 @@
-import { client, remapFields } from "./index"
+import { client, remapFields } from "."
 
 export interface Container {
   key: string
@@ -12,7 +12,9 @@ export interface Container {
 }
 
 const toContainer = (data: object): Container => {
-  const container = remapFields(data, { created_at: "createdAt" })
+  const container = remapFields(data, {
+    created_at: "createdAt",
+  })
   container.createdAt = new Date(container.createdAt)
   return container
 }

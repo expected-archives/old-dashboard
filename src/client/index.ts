@@ -1,5 +1,6 @@
 import axios from "axios"
 import * as containers from "./containers"
+import * as account from "./account"
 
 const client = axios.create({
   baseURL: process.env.API_URL || "http://localhost:3000",
@@ -13,4 +14,4 @@ const remapFields = (obj: any, fields: any): any =>
     .map(([key, value]) => [fields[key] || key, value])
     .reduce((prev, [key, value]) => ({ ...prev, [key]: value }), {})
 
-export { client, remapFields, containers }
+export { client, remapFields, containers, account }

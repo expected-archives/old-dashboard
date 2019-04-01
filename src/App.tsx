@@ -1,6 +1,6 @@
 import React from "react"
 import { Link, Redirect, Route, Switch } from "react-router-dom"
-import { ListContainer, ListImage, NewContainer } from "./views"
+import { Account, ListContainer, ListImage, NewContainer } from "./views"
 
 export default () => (
   <div>
@@ -27,8 +27,8 @@ export default () => (
           </ul>
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <Link to="/settings" className="nav-link">
-                Settings
+              <Link to="/account" className="nav-link">
+                Account
               </Link>
             </li>
           </ul>
@@ -38,6 +38,7 @@ export default () => (
 
     <div className="container">
       <Switch>
+        <Route path="/account" component={Account} />
         <Route path="/containers/new" component={NewContainer} />
         <Route path="/containers" component={ListContainer} />
         <Route path="/images" component={ListImage} />

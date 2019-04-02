@@ -1,15 +1,15 @@
 import React, { useState } from "react"
-import { account } from "../../client"
+import { getAccount, regenerateApiKey } from "../../client"
 import { FormGroup, FormSection, Header } from ".."
 import { usePromise } from "../../hooks"
 
 export default () => {
-  const { loading, data, error, dispatch } = usePromise(() => account.get(), [])
+  const { loading, data, error, dispatch } = usePromise(() => getAccount(), [])
   const [reveal, setReveal] = useState<boolean>(false)
   const [apiError, setAPIError] = useState<Error | undefined>()
 
   const regenerateAPIKey = () => {
-    account.regenerateApiKey()
+    regenerateApiKey()
       .then((data) => {
         dispatch({ action: "SET_DATA", data })
         setReveal(true)

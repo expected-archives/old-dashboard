@@ -1,5 +1,5 @@
 import { usePromise } from "../../hooks"
-import { containers } from "../../client"
+import { Container, getContainers } from "../../client"
 import React from "react"
 import { Header, TableCard } from ".."
 import { Link } from "react-router-dom"
@@ -49,7 +49,7 @@ const columns = [
 ]
 
 export default () => {
-  const { loading, data, error } = usePromise(() => containers.list(), [])
+  const { loading, data, error } = usePromise(() => getContainers(), [])
 
   return (
     <div>
@@ -67,7 +67,7 @@ export default () => {
       )}
       {data && (
         <>
-          <TableCard<containers.Container>
+          <TableCard<Container>
             columns={columns}
             dataSource={data}
             onRowClick={(data) => console.log(data)}

@@ -1,12 +1,8 @@
 import React, { FormEvent } from "react"
 import { Link } from "react-router-dom"
-import { usePromise } from "../../hooks"
-import { containers } from "../../client"
 import { Form, FormGroup, Header } from ".."
 
 export default () => {
-  const { loading, data, error } = usePromise(() => containers.list(), [])
-
   const handleChange = (event: any) => {
 
   }

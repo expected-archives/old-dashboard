@@ -1,24 +1,24 @@
-import React, { FormEvent } from "react"
+import React from "react"
 import { Link } from "react-router-dom"
 import { Form, FormGroup, Header } from ".."
+import { useForm } from "../../hooks"
 
 export default () => {
-  const handleChange = (event: any) => {
+  const { loading, error, handleChange, handleSubmit } = useForm({
+    name: "",
+    image: "",
+    size: "64",
+    tags: "",
+  }, async (values) => {
+    throw new Error("lol")
+  })
 
-  }
-
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault()
-
-    // const { name, image, size, tags } = this.state
-    // containers.create({ name, image, size, tags: [] })
-    //   .then(console.log)
-    //   .catch(console.error)
-  }
   return (
     <div className="row justify-content-center">
       <div className="col-12 col-lg-10 col-xl-8">
         <Header pretitle="Containers" title="Create a new container"/>
+
+        <p>Loading: {loading}, Error: {error && error.message}</p>
 
         <Form onSubmit={handleSubmit}>
           <FormGroup name="Name">

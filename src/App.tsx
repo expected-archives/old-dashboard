@@ -1,7 +1,6 @@
 import React from "react"
 import { Link, Redirect, Route, Switch } from "react-router-dom"
-import { ListContainer, ListImage, NewContainer } from "./views"
-import { Account } from "./components"
+import { Account, ListContainer, ListImage, NewContainer } from "./components"
 
 export default () => (
   <div>
@@ -11,7 +10,7 @@ export default () => (
           Expected.sh
         </Link>
         <button className="navbar-toggler" type="button">
-          <span className="navbar-toggler-icon" />
+          <span className="navbar-toggler-icon"/>
         </button>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav">
@@ -39,11 +38,11 @@ export default () => (
 
     <div className="container">
       <Switch>
-        <Route path="/account" component={Account} />
-        <Route path="/containers/new" component={NewContainer} />
-        <Route path="/containers" component={ListContainer} />
-        <Route path="/images" component={ListImage} />
-        <Redirect from="/" to="/containers" />
+        <Route path="/account" component={Account}/>
+        <Route path="/containers/new" component={NewContainer}/>
+        <Route path="/containers" component={ListContainer}/>
+        <Route path="/images" component={ListImage}/>
+        <Redirect from="/" to="/containers"/>
       </Switch>
     </div>
 

@@ -1,13 +1,13 @@
 import React, { useState } from "react"
 import { account } from "../../client"
-import { FormGroup, FormSection, Header } from "../index"
+import { FormGroup, FormSection, Header } from ".."
 import { usePromise } from "../../hooks"
 
 export default () => {
   const { loading, data, error, dispatch } = usePromise(() => account.get(), [])
   const [reveal, setReveal] = useState<boolean>(false)
   const [apiError, setAPIError] = useState<Error | undefined>()
-  
+
   const regenerateAPIKey = () => {
     account.regenerateApiKey()
       .then((data) => {
@@ -46,24 +46,22 @@ export default () => {
             </FormGroup>
           </FormSection>
           <FormSection name="API Key">
-            <>
-              <div className="form-row form-group">
-                <div className="col-10">
-                  <input type={reveal ? "text" : "password"} className="form-control" name="name" value={data.apiKey}
-                         disabled/>
-                </div>
-                <div className="col">
-                  <a className="btn btn-outline-primary form-control" onClick={() => setReveal(!reveal)}>
-                    Reveal
-                  </a>
-                </div>
+            <div className="form-row form-group">
+              <div className="col-10">
+                <input type={reveal ? "text" : "password"} className="form-control" name="name" value={data.apiKey}
+                       disabled/>
               </div>
-              <div className="form-group">
-                <a className="btn btn-success" onClick={regenerateAPIKey}>
-                  Regenerate API Key
+              <div className="col">
+                <a className="btn btn-outline-primary form-control" onClick={() => setReveal(!reveal)}>
+                  Reveal
                 </a>
               </div>
-            </>
+            </div>
+            <div className="form-group">
+              <a className="btn btn-success" onClick={regenerateAPIKey}>
+                Regenerate API Key
+              </a>
+            </div>
           </FormSection>
         </>
       )}

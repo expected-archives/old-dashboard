@@ -1,56 +1,37 @@
-import React, { Component, FormEvent } from "react"
+import React, { FormEvent } from "react"
 import { Link } from "react-router-dom"
-import { containers } from "../client"
-import { Form, FormGroup, Header } from "../components"
+import { usePromise } from "../../hooks"
+import { containers } from "../../client"
+import { Form, FormGroup, Header } from ".."
 
-interface IProps {
-}
+export default () => {
+  const { loading, data, error } = usePromise(() => containers.list(), [])
 
-interface IState {
-  name: string
-  image: string
-  size: string
-  tags: string
-}
+  const handleChange = (event: any) => {
 
-export default class NewContainer extends Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-
-    this.state = {
-      name: "",
-      image: "",
-      size: "",
-      tags: "",
-    }
   }
 
-  public handleChange = (event: any) => {
-    this.setState({ [event.target.name]: event.target.value } as any)
-  }
-
-  public handleSubmit = (event: FormEvent) => {
+  const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 
-    const { name, image, size, tags } = this.state
-    containers.create({ name, image, size, tags: [] })
-      .then(console.log)
-      .catch(console.error)
+    // const { name, image, size, tags } = this.state
+    // containers.create({ name, image, size, tags: [] })
+    //   .then(console.log)
+    //   .catch(console.error)
   }
-
-  public render = () => (
+  return (
     <div className="row justify-content-center">
       <div className="col-12 col-lg-10 col-xl-8">
         <Header pretitle="Containers" title="Create a new container"/>
 
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={handleSubmit}>
           <FormGroup name="Name">
             <input
               type="text"
               className="form-control"
               placeholder="my-container"
               name="name"
-              onChange={this.handleChange}
+              onChange={handleChange}
             />
           </FormGroup>
 
@@ -60,7 +41,7 @@ export default class NewContainer extends Component<IProps, IState> {
               className="form-control"
               placeholder="nginx:latest"
               name="image"
-              onChange={this.handleChange}
+              onChange={handleChange}
             />
           </FormGroup>
 
@@ -68,7 +49,7 @@ export default class NewContainer extends Component<IProps, IState> {
             <select
               className="form-control"
               name="size"
-              onChange={this.handleChange}>
+              onChange={handleChange}>
               <option value="64">64mb</option>
               <option value="128">128mb</option>
               <option value="256">256mb</option>
@@ -82,7 +63,7 @@ export default class NewContainer extends Component<IProps, IState> {
               type="text"
               className="form-control"
               name="tags"
-              onChange={this.handleChange}
+              onChange={handleChange}
             />
           </FormGroup>
 

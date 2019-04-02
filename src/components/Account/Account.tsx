@@ -1,41 +1,12 @@
-import React, { ReactNode, useEffect, useState } from "react"
-import { account } from "../client"
-import { Form, FormGroup, Header } from "../components"
-
-interface IProps {
-  name: string
-  description?: string
-  children?: ReactNode
-}
-
-const FormSection = ({ name, description, children }: IProps) => {
-  return (
-    <div className="row form-section">
-      <div className="col-md-4">
-        <h3>{name}</h3>
-        {description && (
-          <p className="text-muted">
-            {description}
-          </p>
-        )}
-      </div>
-      <div className="col-md-8">
-        {children}
-      </div>
-    </div>
-  )
-}
+import { useState } from "react"
+import { account } from "../../client"
+import { Form, FormGroup, Header, FormSection } from "../index"
+import React from "react"
+import { usePromise } from "../../hooks"
 
 export default () => {
-  const [data, setData] = useState<account.Account | undefined>(undefined)
-
-  useEffect(() => {
-    const fetch = async () => {
-      const data = await account.get()
-      setData(data)
-    }
-    fetch().catch(console.error)
-  }, [])
+  const [toggle, setToggle] = useState<boolean>(false)
+  const { data, error, loading } = usePromise(() => account.get(), [toggle])
 
   return (
     <div>
@@ -62,7 +33,7 @@ export default () => {
                 </div>
               </div>
               <div>
-                <button className="btn btn-success mt-2">Regenerate API Key</button>
+                <a className="btn btn-success mt-2" onClick={() => setToggle(!toggle)}>Regenerate API Key</a>
               </div>
             </>
           </FormSection>

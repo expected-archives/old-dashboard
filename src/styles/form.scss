@@ -36,3 +36,7 @@ label {
     margin-bottom: 0;
   }
 }
+
+.form-control:disabled, .form-control[readonly] {
+  background: $grey;
+}

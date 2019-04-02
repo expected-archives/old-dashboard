@@ -1,6 +1,7 @@
 import React from "react"
 import { Link, Redirect, Route, Switch } from "react-router-dom"
-import { Account, ListContainer, ListImage, NewContainer } from "./views"
+import { ListContainer, ListImage, NewContainer } from "./views"
+import { Account } from "./components"
 
 export default () => (
   <div>

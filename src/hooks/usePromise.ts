@@ -1,4 +1,4 @@
-import { DependencyList, useEffect, useReducer } from "react"
+import { DependencyList, Dispatch, useEffect, useReducer } from "react"
 
 interface IState<T> {
   data?: T;
@@ -36,7 +36,7 @@ const reducer = <T, >(state: IState<T>, action: Action<T>): IState<T> => {
   }
 }
 
-export default <T, >(promise: () => Promise<T>, deps?: DependencyList): IState<T> => {
+export default <T, >(promise: () => Promise<T>, deps?: DependencyList) => {
   const [state, dispatch] = useReducer(reducer, {
     loading: true,
   })
@@ -60,5 +60,8 @@ export default <T, >(promise: () => Promise<T>, deps?: DependencyList): IState<T
     }
   }, deps)
 
-  return state as IState<T>
+  return {
+    ...state,
+    dispatch,
+  } as IState<T> & { dispatch: Dispatch<Action<T>> }
 }

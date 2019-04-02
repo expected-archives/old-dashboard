@@ -36,8 +36,8 @@ export const sync = (): Promise<Account> =>
     return toAccount(res.data.account)
   })
 
-export const renewApiKey = (): Promise<Account> =>
-  client.post("/v1/account/renew_apikey").then((res) => {
+export const regenerateApiKey = (): Promise<Account> =>
+  client.post("/v1/account/regenerate_apikey").then((res) => {
     if (res.status !== 200) {
       throw new Error(res.data.message)
     }

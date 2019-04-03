@@ -14,7 +14,6 @@ interface IProps<T> {
   columns: IColumn[]
 }
 
-// prettier-ignore
 export default <T, >({ title, onRowClick, dataSource, columns }: IProps<T>) => {
   const onClick = (data: T) => () => {
     if (onRowClick) {
@@ -36,7 +35,7 @@ export default <T, >({ title, onRowClick, dataSource, columns }: IProps<T>) => {
           <thead>
             <tr>
               {columns.map(({ title: columnTitle, align }, index) => (
-                <th key={index} align={align || "left"}>
+                <th key={index} style={{ textAlign: align || "left" }}>
                   {columnTitle}
                 </th>
               ))}
@@ -46,7 +45,7 @@ export default <T, >({ title, onRowClick, dataSource, columns }: IProps<T>) => {
             {dataSource.map((data: any, index) => (
               <tr key={index} onClick={onClick(data)}>
                 {columns.map(({ key, align, render }, index) => (
-                  <td key={index} align={align || "left"}>
+                  <td key={index} style={{ textAlign: align || "left" }}>
                     {render ? render(data[key]) : data[key]}
                   </td>
                 ))}

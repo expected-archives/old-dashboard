@@ -36,15 +36,13 @@ export default () => (
       </div>
     </nav>
 
-    <div className="container">
-      <Switch>
-        <Route path="/account" component={Account}/>
-        <Route path="/containers/new" component={NewContainer}/>
-        <Route path="/containers" component={ListContainer}/>
-        <Route path="/images" component={ListImage}/>
-        <Redirect from="/" to="/containers"/>
-      </Switch>
-    </div>
+    <Switch>
+      <Route path="/account" component={Account}/>
+      <Route path="/containers/new" component={NewContainer}/>
+      <Route path="/containers" component={ListContainer}/>
+      <Route path="/images" component={ListImage}/>
+      <Redirect from="/" to="/containers"/>
+    </Switch>
 
     <div className="footer">
       <p className="text-muted">

@@ -38,6 +38,16 @@
   }
 }
 
+.btn-primary {
+  background: $blue;
+  border-color: $blue;
+
+  &:hover {
+    background: $blue-dark;
+    border-color: $blue-dark;
+  }
+}
+
 .btn-outline-success {
   color: $green;
   border-color: $grey;
@@ -59,10 +69,14 @@
 }
 
 .tag {
-  color: $grey-dark;
-  background: $grey-light;
-  border: 1px solid $grey;
-  padding: 4px;
+  display: inline;
+  background: $dark;
+  color: #fff;
+  padding: 2px 12px;
   margin-left: 5px;
-  border-radius: 5px;
+  border-radius: 15px;
+
+  &:first-child {
+    margin-left: 0;
+  }
 }

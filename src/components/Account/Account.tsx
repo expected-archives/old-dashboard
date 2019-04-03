@@ -35,51 +35,53 @@ export default () => {
   return (
     <div>
       <Header title="Account" preTitle="Overview"/>
-      {loading && (
-        <p>Loading...</p>
-      )}
-      {error && (
-        <p>Error: {error.message}...</p>
-      )}
-      {data && (
-        <>
-          {apiError && (
-            <div className="alert alert-danger">
-              {apiError.message}
-            </div>
-          )}
-          <FormSection name="Profile"
-                       description="Your email address is your identity on Expected and is used to log in.">
-            <FormGroup name="Email">
-              <input type="email" className="form-control" name="email" value={data.email} disabled/>
-            </FormGroup>
-            <FormGroup name="Name">
-              <input type="text" className="form-control" name="name" value={data.name} disabled/>
-            </FormGroup>
-            <button className="btn btn-outline-primary" onClick={syncAccountHandler}>
-              Sync with GitHub
-            </button>
-          </FormSection>
-          <FormSection name="API Key">
-            <div className="form-row form-group">
-              <div className="col-10">
-                <input type={reveal ? "text" : "password"} className="form-control" name="name" value={data.apiKey}
-                       disabled/>
+      <div className="container">
+        {loading && (
+          <p>Loading...</p>
+        )}
+        {error && (
+          <p>Error: {error.message}...</p>
+        )}
+        {data && (
+          <>
+            {apiError && (
+              <div className="alert alert-danger">
+                {apiError.message}
               </div>
-              <div className="col">
-                <button className="btn btn-outline-primary form-control" onClick={() => setReveal(!reveal)}>
-                  Reveal
+            )}
+            <FormSection name="Profile"
+                         description="Your email address is your identity on Expected and is used to log in.">
+              <FormGroup name="Email">
+                <input type="email" className="form-control" name="email" value={data.email} disabled/>
+              </FormGroup>
+              <FormGroup name="Name">
+                <input type="text" className="form-control" name="name" value={data.name} disabled/>
+              </FormGroup>
+              <button className="btn btn-outline-primary" onClick={syncAccountHandler}>
+                Sync with GitHub
+              </button>
+            </FormSection>
+            <FormSection name="API Key">
+              <div className="form-row form-group">
+                <div className="col-10">
+                  <input type={reveal ? "text" : "password"} className="form-control" name="name" value={data.apiKey}
+                         disabled/>
+                </div>
+                <div className="col">
+                  <button className="btn btn-outline-primary form-control" onClick={() => setReveal(!reveal)}>
+                    Reveal
+                  </button>
+                </div>
+              </div>
+              <div className="form-group">
+                <button className="btn btn-success" onClick={regenerateApiKeyHandler}>
+                  Regenerate API Key
                 </button>
               </div>
-            </div>
-            <div className="form-group">
-              <button className="btn btn-success" onClick={regenerateApiKeyHandler}>
-                Regenerate API Key
-              </button>
-            </div>
-          </FormSection>
-        </>
-      )}
+            </FormSection>
+          </>
+        )}
+      </div>
     </div>
   )
 }

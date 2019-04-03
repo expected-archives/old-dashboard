@@ -25,7 +25,7 @@ const columns = [
     render: (tags: any) => (
       <>
         {tags.map((tag: string, index: number) => (
-          <span key={index} className="tag">{tag}</span>
+          <div key={index} className="tag">{tag}</div>
         ))}
       </>
     ),
@@ -52,28 +52,30 @@ export default () => {
   const { loading, data, error } = usePromise(() => getContainers(), [])
 
   return (
-    <div>
+    <>
       <Header title="Containers" preTitle="Overview">
         <Link to="/containers/new" className="btn btn-success">
           Create
         </Link>
       </Header>
 
-      {loading && (
-        <p>Loading...</p>
-      )}
-      {error && (
-        <p>Error: {error.message}...</p>
-      )}
-      {data && (
-        <>
-          <TableCard<Container>
-            columns={columns}
-            dataSource={data}
-            onRowClick={(data) => console.log(data)}
-          />
-        </>
-      )}
-    </div>
+      <div className="container">
+        {loading && (
+          <p>Loading...</p>
+        )}
+        {error && (
+          <p>Error: {error.message}...</p>
+        )}
+        {data && (
+          <>
+            <TableCard<Container>
+              columns={columns}
+              dataSource={data}
+              onRowClick={(data) => console.log(data)}
+            />
+          </>
+        )}
+      </div>
+    </>
   )
 }

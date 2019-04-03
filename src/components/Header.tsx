@@ -8,16 +8,18 @@ interface IProps {
 
 export default ({ title, preTitle, children }: IProps) => (
   <div className="header">
-    <div className="row align-items-end">
-      <div className="col">
-        <h6 className="header-pretitle">{preTitle}</h6>
-        <h1 className="header-title">{title}</h1>
-      </div>
-      {children && (
-        <div className="col-auto">
-          {children}
+    <div className="container">
+      <div className="row align-items-end">
+        <div className="col">
+          <h6 className="header-pretitle">{preTitle}</h6>
+          <h1 className="header-title">{title}</h1>
         </div>
-      )}
+        {children && (
+          <div className="col-auto align-self-center">
+            {children}
+          </div>
+        )}
+      </div>
     </div>
   </div>
 )

@@ -53,7 +53,7 @@ export default () => {
 
   return (
     <div>
-      <Header title="Containers" pretitle="Overview">
+      <Header title="Containers" preTitle="Overview">
         <Link to="/containers/new" className="btn btn-success">
           Create
         </Link>

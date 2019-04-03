@@ -53,8 +53,12 @@ const toContainer = (data: object): Container => {
 
 export const client = axios.create({
   baseURL: process.env.API_URL || "http://localhost:3000",
-  headers: {
-    Authorization: document.cookie.split("=")[1],
+  transformRequest(data, headers) {
+    headers.Authorization = document.cookie.split("=")[1]
+    return data
+  },
+  validateStatus() {
+    return true
   },
 })
 

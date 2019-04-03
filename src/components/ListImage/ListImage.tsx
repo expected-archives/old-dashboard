@@ -4,7 +4,7 @@ import { Header } from ".."
 export default () => {
   return (
     <div>
-      <Header title="Images" pretitle="Overview"/>
+      <Header title="Images" preTitle="Overview"/>
     </div>
   )
 }

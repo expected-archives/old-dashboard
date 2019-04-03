@@ -1,28 +1,40 @@
 import React, { useState } from "react"
-import { getAccount, regenerateApiKey } from "../../client"
+import { getAccount, regenerateApiKey, syncAccount } from "../../client"
 import { FormGroup, FormSection, Header } from ".."
 import { usePromise } from "../../hooks"
 
 export default () => {
   const { loading, data, error, dispatch } = usePromise(() => getAccount(), [])
   const [reveal, setReveal] = useState<boolean>(false)
-  const [apiError, setAPIError] = useState<Error | undefined>()
+  const [apiError, setApiError] = useState<Error | undefined>()
 
-  const regenerateAPIKey = () => {
+  const regenerateApiKeyHandler = () => {
     regenerateApiKey()
       .then((data) => {
         dispatch({ action: "SET_DATA", data })
+        document.cookie = `token=${data.apiKey}`
         setReveal(true)
-        setAPIError(undefined)
+        setApiError(undefined)
       })
       .catch((error) => {
-        setAPIError(error)
+        setApiError(error)
+      })
+  }
+
+  const syncAccountHandler = () => {
+    syncAccount()
+      .then((data) => {
+        dispatch({ action: "SET_DATA", data })
+        setApiError(undefined)
+      })
+      .catch((error) => {
+        setApiError(error)
       })
   }
 
   return (
     <div>
-      <Header title="Account" pretitle="Overview"/>
+      <Header title="Account" preTitle="Overview"/>
       {loading && (
         <p>Loading...</p>
       )}
@@ -44,6 +56,9 @@ export default () => {
             <FormGroup name="Name">
               <input type="text" className="form-control" name="name" value={data.name} disabled/>
             </FormGroup>
+            <button className="btn btn-outline-primary" onClick={syncAccountHandler}>
+              Sync with GitHub
+            </button>
           </FormSection>
           <FormSection name="API Key">
             <div className="form-row form-group">
@@ -52,15 +67,15 @@ export default () => {
                        disabled/>
               </div>
               <div className="col">
-                <a className="btn btn-outline-primary form-control" onClick={() => setReveal(!reveal)}>
+                <button className="btn btn-outline-primary form-control" onClick={() => setReveal(!reveal)}>
                   Reveal
-                </a>
+                </button>
               </div>
             </div>
             <div className="form-group">
-              <a className="btn btn-success" onClick={regenerateAPIKey}>
+              <button className="btn btn-success" onClick={regenerateApiKeyHandler}>
                 Regenerate API Key
-              </a>
+              </button>
             </div>
           </FormSection>
         </>

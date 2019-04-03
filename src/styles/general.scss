@@ -31,11 +31,31 @@
 .btn-success {
   background: $green;
   border-color: $green;
+
+  &:hover {
+    background: $green-dark;
+    border-color: $green-dark;
+  }
 }
 
-.btn-success:hover {
-  background: $green-dark;
-  border-color: $green-dark;
+.btn-outline-success {
+  color: $green;
+  border-color: $grey;
+
+  &:hover {
+    background: $green;
+    border-color: $green;
+  }
+}
+
+.btn-outline-primary {
+  color: $blue;
+  border-color: $grey;
+
+  &:hover {
+    background: $blue;
+    border-color: $blue;
+  }
 }
 
 .tag {

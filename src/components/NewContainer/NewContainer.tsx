@@ -1,26 +1,28 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { Form, FormGroup, Header } from ".."
+import { Form, FormGroup, FormSection, Header } from ".."
 import { useForm } from "../../hooks"
 
+// col-12 col-lg-10 col-xl-8
+
 export default () => {
-  const { loading, error, handleChange, handleSubmit } = useForm({
-    name: "",
-    image: "",
-    size: "64",
-    tags: "",
-  }, async (values) => {
-    throw new Error("lol")
-  })
+  // const { loading, error, handleChange, handleSubmit } = useForm({
+  //   name: "",
+  //   image: "",
+  //   size: "64",
+  //   tags: "",
+  // }, async (values) => {
+  //   throw new Error("lol")
+  // })
+
+  const [handleChange, handleSubmit] = [undefined, undefined]
 
   return (
-    <div className="row justify-content-center">
-      <div className="col-12 col-lg-10 col-xl-8">
-        <Header pretitle="Containers" title="Create a new container"/>
+    <>
+      <Header preTitle="Containers" title="Create a new container"/>
 
-        <p>Loading: {loading}, Error: {error && error.message}</p>
-
-        <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
+        <FormSection name="Basic" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
           <FormGroup name="Name">
             <input
               type="text"
@@ -41,17 +43,6 @@ export default () => {
             />
           </FormGroup>
 
-          <FormGroup name="Select a size">
-            <select
-              className="form-control"
-              name="size"
-              onChange={handleChange}>
-              <option value="64">64mb</option>
-              <option value="128">128mb</option>
-              <option value="256">256mb</option>
-            </select>
-          </FormGroup>
-
           <FormGroup
             name="Tags"
             description="This is how others will learn about the project, so make it good!">
@@ -62,17 +53,33 @@ export default () => {
               onChange={handleChange}
             />
           </FormGroup>
+        </FormSection>
 
-          <hr className="mt-5 mb-5"/>
+        <FormSection name="Choose a plan" description=" do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
+          <FormGroup name="Select a size">
+            <select
+              className="form-control"
+              name="size"
+              onChange={handleChange}>
+              <option value="64">64mb</option>
+              <option value="128">128mb</option>
+              <option value="256">256mb</option>
+            </select>
+          </FormGroup>
+        </FormSection>
 
-          <button className="btn btn-block btn-success">
-            Create container
-          </button>
-          <Link to="/containers" className="btn btn-block btn-link text-muted">
-            Cancel
-          </Link>
-        </Form>
-      </div>
-    </div>
+        <div className="row justify-content-end">
+          <div className="col-12 col-lg-10 col-xl-8">
+            <button className="btn btn-success p-2 btn-block">
+              Create
+            </button>
+          </div>
+
+
+        </div>
+      </Form>
+
+
+    </>
   )
 }

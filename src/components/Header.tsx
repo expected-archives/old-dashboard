@@ -16,18 +16,29 @@ const Header = styled.div`
   background: ${props => props.theme.color.light};
 `
 
+const PreTitle = styled.h6`
+  color: ${props => props.theme.color.greyDark};
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+`
+
+const Title = styled.h1`
+  font-weight: 600;
+  margin-bottom: 0;
+`
+
 export default ({ title, preTitle, children }: IProps) => (
   <Header>
     <Container>
       <Grid.Row>
         <Grid.Col>
-          <h6 className="header-pretitle">{preTitle}</h6>
-          <h1 className="header-title">{title}</h1>
+          <PreTitle>{preTitle}</PreTitle>
+          <Title>{title}</Title>
         </Grid.Col>
         {children && (
-          <div className="col-auto align-self-center">
+          <Grid.Col auto alignSelf="center">
             {children}
-          </div>
+          </Grid.Col>
         )}
       </Grid.Row>
     </Container>

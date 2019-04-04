@@ -1,11 +1,31 @@
 import React from "react"
 import { Link, Redirect, Route, Switch } from "react-router-dom"
-import { Account, ListContainer, ListImage, NewContainer } from "./components"
+import { Account, Container, ListContainer, ListImage, NewContainer } from "./components"
+
+interface IProps {
+  to: string
+  exact?: boolean
+  name: string
+}
+
+const NavLink = ({ to, exact, name }: IProps) => {
+  return (
+    <Route path={to} exact={exact} children={({ match }) => {
+      return (
+        <li className={`nav-item ${match && "active"}`}>
+          <Link to={to} className="nav-link">
+            {name}
+          </Link>
+        </li>
+      )
+    }}/>
+  )
+}
 
 export default () => (
   <div>
     <nav className="navbar navbar-expand-lg navbar-dark">
-      <div className="container">
+      <Container>
         <Link to="/" className="navbar-brand">
           Expected.sh
         </Link>
@@ -14,26 +34,14 @@ export default () => (
         </button>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav">
-            <li className="nav-item active">
-              <Link to="/containers" className="nav-link">
-                Containers
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/images" className="nav-link">
-                Images
-              </Link>
-            </li>
+            <NavLink to="/containers" name="Containers"/>
+            <NavLink to="/images" name="Images"/>
           </ul>
           <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to="/account" className="nav-link">
-                Account
-              </Link>
-            </li>
+            <NavLink to="/account" name="Account"/>
           </ul>
         </div>
-      </div>
+      </Container>
     </nav>
 
     <Switch>

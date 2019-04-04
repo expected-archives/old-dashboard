@@ -1,15 +1,19 @@
-import { createBrowserHistory } from "history"
 import React from "react"
 import ReactDOM from "react-dom"
 import { Router } from "react-router"
+import { createBrowserHistory } from "history"
+import { ThemeProvider } from "emotion-theming"
+import { theme } from "./styled"
 import App from "./App"
 import "./styles/index.scss"
 
 const history = createBrowserHistory()
 
-ReactDOM.render(
-  <Router history={history}>
-    <App />
-  </Router>,
-  document.getElementById("root")
-)
+ReactDOM.render((
+  <ThemeProvider theme={theme}>
+    <Router history={history}>
+      <App/>
+    </Router>
+  </ThemeProvider>
+), document.getElementById("root"))
+

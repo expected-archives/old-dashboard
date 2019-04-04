@@ -52,6 +52,10 @@
   color: $green;
   border-color: $grey;
 
+  &:focus {
+    color: $green;
+  }
+
   &:hover {
     background: $green;
     border-color: $green;
@@ -61,6 +65,12 @@
 .btn-outline-primary {
   color: $blue;
   border-color: $grey;
+
+  &:focus {
+    color: $blue;
+    border-color: $grey;
+    background: transparent;
+  }
 
   &:hover {
     background: $blue;

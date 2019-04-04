@@ -9,6 +9,18 @@ const columns = [
   {
     title: "Name",
     key: "name",
+    render: (name: any) => (
+      <>
+        <img src={require('./test.svg')} style={{
+          marginRight: 15,
+          border: "1px solid red",
+          borderRadius: "50%",
+          height: 42,
+          padding: 5,
+        }}/>
+        {name}
+      </>
+    ),
   },
   {
     title: "Image",

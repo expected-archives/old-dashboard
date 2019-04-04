@@ -1,4 +1,6 @@
 import React, { ReactNode } from "react"
+import styled from "../styled"
+import { Container } from "."
 
 interface IProps {
   title: string
@@ -6,9 +8,17 @@ interface IProps {
   children?: ReactNode
 }
 
+const Header = styled.div`
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid ${props => props.theme.color.grey};
+  margin-bottom: 2rem;
+  background: ${props => props.theme.color.light};
+`
+
 export default ({ title, preTitle, children }: IProps) => (
-  <div className="header">
-    <div className="container">
+  <Header>
+    <Container>
       <div className="row align-items-end">
         <div className="col">
           <h6 className="header-pretitle">{preTitle}</h6>
@@ -20,6 +30,6 @@ export default ({ title, preTitle, children }: IProps) => (
           </div>
         )}
       </div>
-    </div>
-  </div>
+    </Container>
+  </Header>
 )

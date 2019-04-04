@@ -1,14 +1,13 @@
-import { styled } from "../../style"
 import { css } from "@emotion/core"
+import { Align } from "."
+import { styled } from "../../style"
 
-type Align = "auto" | "baseline" | "center" | "end" | "flex-end" |
-  "flex-start" | "inherit" | "initial" | "left" | "normal" | "right" | "safe" |
-  "self-end" | "self-start" | "start" | "stretch" | "unsafe" | "unset"
 type Size = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
 
 interface IProps {
   auto?: boolean
   alignSelf?: Align
+  justifySelf?: Align
   extraSmall?: Size
   small?: Size
   medium?: Size
@@ -27,6 +26,7 @@ export default styled.div<IProps>(props => {
   return css`
     position: relative;
     align-self: ${props.alignSelf || "inherit"};
+    justify-self: ${props.justifySelf || "inherit"};
     width: ${props.auto ? "auto" : "100%"};
     flex: ${flex(props.extraSmall)};
     

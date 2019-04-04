@@ -3,7 +3,7 @@ import ReactDOM from "react-dom"
 import { Router } from "react-router"
 import { createBrowserHistory } from "history"
 import { ThemeProvider } from "emotion-theming"
-import { theme } from "./styled"
+import { theme } from "./style"
 import App from "./App"
 import "./styles/index.scss"
 

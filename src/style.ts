@@ -1,4 +1,4 @@
-import styled, { CreateStyled } from "@emotion/styled"
+import emotionStyled, { CreateStyled } from "@emotion/styled"
 
 type Theme = {
   color: {
@@ -32,4 +32,9 @@ export const theme: Theme = {
   },
 }
 
-export default styled as CreateStyled<Theme>
+export const styled: CreateStyled<Theme> = emotionStyled
+
+export const globalStyle = {
+
+}
+

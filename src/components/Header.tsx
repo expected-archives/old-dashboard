@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react"
-import styled from "../styled"
-import { Container } from "."
+import { styled } from "../style"
+import { Container, Grid } from "."
 
 interface IProps {
   title: string
@@ -19,17 +19,17 @@ const Header = styled.div`
 export default ({ title, preTitle, children }: IProps) => (
   <Header>
     <Container>
-      <div className="row align-items-end">
-        <div className="col">
+      <Grid.Row>
+        <Grid.Col>
           <h6 className="header-pretitle">{preTitle}</h6>
           <h1 className="header-title">{title}</h1>
-        </div>
+        </Grid.Col>
         {children && (
           <div className="col-auto align-self-center">
             {children}
           </div>
         )}
-      </div>
+      </Grid.Row>
     </Container>
   </Header>
 )

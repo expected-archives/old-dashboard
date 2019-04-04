@@ -1,9 +1,10 @@
 import { usePromise } from "../../hooks"
 import { Container, getContainers } from "../../client"
 import React from "react"
-import { Header, TableCard } from ".."
+import { Header } from ".."
 import { Link } from "react-router-dom"
 import TimeAgo from "react-timeago"
+import Card, { Table } from "../Card"
 
 const columns = [
   {
@@ -11,7 +12,7 @@ const columns = [
     key: "name",
     render: (name: any) => (
       <>
-        <img src={require('./test.svg')} style={{
+        <img src={require("./test.svg")} style={{
           marginRight: 15,
           border: "1px solid red",
           borderRadius: "50%",
@@ -79,13 +80,10 @@ export default () => {
           <p>Error: {error.message}...</p>
         )}
         {data && (
-          <>
-            <TableCard<Container>
-              columns={columns}
-              dataSource={data}
-              onRowClick={(data) => console.log(data)}
-            />
-          </>
+          <Card>
+            <Table<Container> columns={columns} dataSource={data}
+                              onRowClick={(data) => console.log(data)}/>
+          </Card>
         )}
       </div>
     </>

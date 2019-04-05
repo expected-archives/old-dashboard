@@ -10,7 +10,7 @@ interface IColumn {
 
 interface IProps<T> {
   onRowClick?: (data: T) => any
-  dataSource: T[]
+  dataSource: T[] | undefined
   columns: IColumn[]
 }
 
@@ -26,7 +26,7 @@ const Header = styled.div`
   
 `
 
-export default <T, >({ columns, dataSource, onRowClick }: IProps<T>) => {
+export default <T, >({ columns, dataSource = [], onRowClick }: IProps<T>) => {
   const onClick = (data: T) => () => {
     if (onRowClick) {
       onRowClick(data)
@@ -49,7 +49,7 @@ export default <T, >({ columns, dataSource, onRowClick }: IProps<T>) => {
           {dataSource.map((data: any, index) => (
             <tr key={index} onClick={onClick(data)}>
               {columns.map(({ key, align, render }, index) => (
-                <td key={index} style={{ textAlign: align || "left" }}>
+                <td key={index} style={{ textAlign: align || "left", verticalAlign: "middle" }}>
                   {render ? render(data[key]) : data[key]}
                 </td>
               ))}

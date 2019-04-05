@@ -37,4 +37,3 @@ export const styled: CreateStyled<Theme> = emotionStyled
 export const globalStyle = {
 
 }
-

@@ -1,24 +1,29 @@
 import { usePromise } from "../../hooks"
-import { Container, getContainers } from "../../client"
+import { getContainers, IContainer } from "../../client"
 import React from "react"
-import { Header } from ".."
+import { Container, Header } from ".."
 import { Link } from "react-router-dom"
 import TimeAgo from "react-timeago"
-import Card, { Table } from "../Card"
+import { Card, CardTable } from "../Card"
+import Loader from "../Loader"
 
 const columns = [
+  // {
+  //   render: () => (
+  //     <img src={require("./test.svg")} style={{
+  //       marginRight: 15,
+  //       border: "1px solid red",
+  //       borderRadius: "50%",
+  //       height: 42,
+  //       padding: 5,
+  //     }}/>
+  //   ),
+  // },
   {
     title: "Name",
     key: "name",
     render: (name: any) => (
       <>
-        <img src={require("./test.svg")} style={{
-          marginRight: 15,
-          border: "1px solid red",
-          borderRadius: "50%",
-          height: 42,
-          padding: 5,
-        }}/>
         {name}
       </>
     ),
@@ -72,20 +77,19 @@ export default () => {
         </Link>
       </Header>
 
-      <div className="container">
-        {loading && (
-          <p>Loading...</p>
-        )}
+      <Container>
         {error && (
           <p>Error: {error.message}...</p>
         )}
-        {data && (
-          <Card>
-            <Table<Container> columns={columns} dataSource={data}
-                              onRowClick={(data) => console.log(data)}/>
-          </Card>
-        )}
-      </div>
+        <Loader loading={loading}>
+          {data && (
+            <Card>
+              <CardTable<IContainer> columns={columns} dataSource={data}
+                                     onRowClick={(data) => console.log(data)}/>
+            </Card>
+          )}
+        </Loader>
+      </Container>
     </>
   )
 }

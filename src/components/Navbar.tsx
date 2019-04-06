@@ -14,22 +14,46 @@ interface IProps {
 const NavLink = ({ to, exact, name }: IProps) => {
   return (
     <Route path={to} exact={exact} children={({ match }) => (
-      <li className={`nav-item ${match && "active"}`}>
-        <Link to={to} className="nav-link">
+      <NavItem className={match ? "active" : ""}>
+        <Link to={to}>
           {name}
         </Link>
-      </li>
+      </NavItem>
     )}/>
   )
 }
 
 const Navbar = styled.div`
   background: ${props => props.theme.color.dark};
-  padding: 10px 0;
 `
 
-const Nav = styled.div`
+const Nav = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+`
+
+const NavItem = styled.li`
+  display: inline-block;
+  padding: 15px 10px;
   
+  a {
+    color: rgba(255, 255, 255, 0.5);
+    
+    &:hover {
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: none;
+    }
+  }
+  
+  &.active {
+    border-bottom: 3px solid ${props => props.theme.color.blue};
+    
+    a {
+      color: #fff;
+    }
+  }
 `
 
 const Brand = styled(Link)`
@@ -47,7 +71,7 @@ const Brand = styled(Link)`
 `
 
 const Name = styled.span`
-  color: ${props => props.theme.color.greyDark};
+  color: rgba(255, 255, 255, 0.5);
 `
 
 const Avatar = styled.img`
@@ -56,47 +80,24 @@ const Avatar = styled.img`
   border-radius: 5px;
 `
 
+const Dropdown = styled.div`
+  
+`
+
 export default () => {
 
-  return true ? (<nav className="navbar navbar-expand-lg navbar-dark">
-    <Container>
-      <Link to="/" className="navbar-brand">
-        Expected.sh
-      </Link>
-      <button className="navbar-toggler" type="button">
-        <span className="navbar-toggler-icon"/>
-      </button>
-      <div className="collapse navbar-collapse">
-        <ul className="navbar-nav">
-          <NavLink to="/containers" name="Containers"/>
-          <NavLink to="/images" name="Images"/>
-        </ul>
-        <ul className="navbar-nav ml-auto">
-          <NavLink to="/account" name="Account"/>
-        </ul>
-      </div>
-    </Container>
-  </nav>) : (
+  return (
     <Navbar>
       <Container>
-        <Row>
-          <Col>
-            <Brand to="/">Expected.sh</Brand>
-          </Col>
-          <Col auto>
-            <Name>Rémi Caumette</Name>
-            <Avatar src="https://avatars2.githubusercontent.com/u/32649258?v=4"/>
-          </Col>
-        </Row>
-      </Container>
-      <Container>
+        <Brand to="/">Expected.sh</Brand>
         <Nav>
           <NavLink to="/containers" name="Containers"/>
           <NavLink to="/images" name="Images"/>
         </Nav>
-        <Nav >
-          <NavLink to="/account" name="Account"/>
-        </Nav>
+        <Col auto style={{ alignSelf: "center" }}>
+          <Name>Rémi Caumette</Name>
+          <Avatar src="https://avatars2.githubusercontent.com/u/32649258?v=4"/>
+        </Col>
       </Container>
     </Navbar>
   )

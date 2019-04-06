@@ -2,6 +2,8 @@ import { Link } from "react-router-dom"
 import { styled } from "../../style"
 
 export default styled(Link)`
+  display: flex;
+  align-self: center;
   color: ${props => props.theme.color.light};
   padding-top: 0.3125rem;
   padding-bottom: 0.3125rem;

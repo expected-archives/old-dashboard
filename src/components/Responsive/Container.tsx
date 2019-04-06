@@ -1,4 +1,4 @@
-import { styled } from "../style"
+import { styled } from "../../style"
 
 export default styled.div`
   width: 100%;

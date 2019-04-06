@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { getAccount, regenerateApiKey, syncAccount } from "../../client"
 import { FormGroup, FormSection, Header } from ".."
 import { usePromise } from "../../hooks"
-import Container from "../Container"
+import Container from "../Responsive/Container"
 import Loader from "../Loader"
 
 export default () => {

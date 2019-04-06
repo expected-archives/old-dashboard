@@ -1,14 +1,17 @@
 import { styled } from "../../style"
-import { css } from "@emotion/core"
+import { Align } from "../Responsive"
 
 interface IProps {
-  align?: "left" | "right"
+  justifyContent?: Align
+  vertical?: boolean
 }
 
-export default styled.ul<IProps>(props => css`
+export default styled.ul<IProps>`
   display: flex;
   flex-wrap: wrap;
+  flex-direction: ${props => props.vertical ? "column" : "row"};
   list-style: none;
   padding: 0;
   margin: 0;
-`)
+  justify-content: ${props => props.justifyContent || "flex-start"};
+`

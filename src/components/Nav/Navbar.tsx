@@ -1,9 +1,6 @@
 import React, { ReactNode } from "react"
-import Container from "../Container"
+import Container from "../Responsive/Container"
 import { styled } from "../../style"
-import NavbarBrand from "./NavbarBrand"
-import Nav from "./Nav"
-import NavLink from "./NavLink"
 
 const Navbar = styled.div`
   background: ${props => props.theme.color.dark};

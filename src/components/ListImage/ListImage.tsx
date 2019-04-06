@@ -1,8 +1,7 @@
 import React from "react"
 import { Header } from ".."
-import { Nav, NavLink } from "../Nav"
 import { Card, CardBody } from "../Card"
-import Container from "../Container"
+import Container from "../Responsive/Container"
 
 export default () => {
   return (
@@ -13,10 +12,6 @@ export default () => {
         <Card title="hello">
           <CardBody>
             <p>Hell oworld</p>
-            <Nav>
-              <NavLink to="/containers" name="Containers"/>
-              <NavLink to="/images" name="Images"/>
-            </Nav>
           </CardBody>
         </Card>
       </Container>

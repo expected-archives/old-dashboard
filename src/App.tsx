@@ -1,11 +1,17 @@
 import React from "react"
-import { Link, Redirect, Route, Switch } from "react-router-dom"
-import { Account, Container, ListContainer, ListImage, NewContainer } from "./components"
-import Navbar from "./components/Navbar"
+import { Redirect, Route, Switch } from "react-router-dom"
+import { Account, ListContainer, ListImage, NewContainer } from "./components"
+import { Nav, Navbar, NavbarBrand, NavLink } from "./components/Nav"
 
 export default () => (
   <div>
-    <Navbar/>
+    <Navbar>
+      <NavbarBrand to="/">Expected.sh</NavbarBrand>
+      <Nav>
+        <NavLink to="/containers" name="Containers"/>
+        <NavLink to="/images" name="Images"/>
+      </Nav>
+    </Navbar>
 
     <Switch>
       <Route path="/account" component={Account}/>

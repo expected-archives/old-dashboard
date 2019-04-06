@@ -7,7 +7,7 @@ interface IProps {
 }
 
 const Card = styled.div`
-  display: flex;
+  display: block;
   margin-bottom: 1.5rem;
   border-color: #edf2f9;
   box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
@@ -21,7 +21,7 @@ const Header = styled.div`
   color: inherit;
   border-bottom: 1px solid ${props => props.theme.color.grey};
   background-color: transparent;
-  
+
   h4 {
     margin: 0;
   }

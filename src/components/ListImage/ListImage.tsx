@@ -2,9 +2,16 @@ import React from "react"
 import { Header } from ".."
 import { Card, CardBody } from "../Card"
 import Container from "../Responsive/Container"
-import { Dropdown } from "../Dropdown"
+import { Dropdown, DropdownButton, DropdownContent, DropdownItem } from "../Dropdown"
 
 export default () => {
+  const overlay = () => (
+    <DropdownContent>
+      <DropdownItem><a href="#">Action</a></DropdownItem>
+      <DropdownItem><a href="#">Another action</a></DropdownItem>
+      <DropdownItem><a href="#">Something else here</a></DropdownItem>
+    </DropdownContent>
+  )
   return (
     <div>
       <Header title="Images" preTitle="Overview"/>
@@ -13,8 +20,10 @@ export default () => {
         <Card title="hello">
           <CardBody>
             <p>Hell oworld</p>
-            <Dropdown>
-              <a href="#">Check here</a>
+            <Dropdown overlay={overlay}>
+              <DropdownButton href="#">
+                Click me
+              </DropdownButton>
             </Dropdown>
           </CardBody>
         </Card>

@@ -15,9 +15,7 @@ interface IProps<T> {
 }
 
 
-const Table = styled.div`
-  display: block;
-  width: 100%;
+const Table = styled.table`
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 `
@@ -35,7 +33,7 @@ export default <T, >({ columns, dataSource = [], onRowClick }: IProps<T>) => {
 
   return (
     <div className="card-table table-responsive">
-      <table className="table table-hover">
+      <Table className="table table-hover">
         <thead>
           <tr>
             {columns.map(({ title: columnTitle, align }, index) => (
@@ -56,7 +54,7 @@ export default <T, >({ columns, dataSource = [], onRowClick }: IProps<T>) => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </div>
   )
 }

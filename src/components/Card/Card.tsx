@@ -9,7 +9,7 @@ interface IProps {
 const Card = styled.div`
   display: block;
   margin-bottom: 1.5rem;
-  border-color: #edf2f9;
+  border: 1px solid #edf2f9;
   box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
   background-color: ${props => props.theme.color.light};
   border-radius: .25rem;

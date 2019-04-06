@@ -5,8 +5,9 @@ import { Header } from ".."
 import { Container } from "../Responsive"
 import { Link } from "react-router-dom"
 import TimeAgo from "react-timeago"
-import { Card, CardTable } from "../Card"
+import { Card, CardBody, CardTable } from "../Card"
 import Loader from "../Loader"
+import { Dropdown, DropdownButton, DropdownContent, DropdownItem } from "../Dropdown"
 
 const columns = [
   // {
@@ -52,18 +53,23 @@ const columns = [
   {
     title: "",
     key: "",
-    render: () => (
-      <div className="dropdown">
-        <button className="btn btn-link dropdown-toggle" type="button" style={{ padding: 0 }}>
-          More
-        </button>
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a className="dropdown-item" href="#">Action</a>
-          <a className="dropdown-item" href="#">Another action</a>
-          <a className="dropdown-item" href="#">Something else here</a>
-        </div>
-      </div>
-    ),
+    render: () => {
+      const overlay = () => (
+        <DropdownContent>
+          <DropdownItem><a href="#">Action</a></DropdownItem>
+          <DropdownItem><a href="#">Another action</a></DropdownItem>
+          <DropdownItem><a href="#">Something else here</a></DropdownItem>
+        </DropdownContent>
+      )
+
+      return (
+        <Dropdown overlay={overlay}>
+          <DropdownButton href="#">
+            More
+          </DropdownButton>
+        </Dropdown>
+      )
+    },
   },
 ]
 

@@ -17,7 +17,7 @@ const Avatar = styled.img`
 `
 
 export default () => (
-  <div>
+  <>
     <Navbar>
       <NavbarBrand to="/">Expected.sh</NavbarBrand>
       <Nav style={{ marginRight: "auto" }}>
@@ -45,5 +45,5 @@ export default () => (
         &copy; Expected.sh - All Rights Reserved 2019
       </p>
     </div>
-  </div>
+  </>
 )

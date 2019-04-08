@@ -8,6 +8,7 @@ import TimeAgo from "react-timeago"
 import { Card, CardTable } from "../Card"
 import Loader from "../Loader/Loader"
 import { Dropdown, DropdownButton, DropdownContent, DropdownItem } from "../Dropdown"
+import { ButtonLink } from "../Form"
 
 const columns = [
   // {
@@ -79,9 +80,9 @@ export default () => {
   return (
     <>
       <Header title="Containers" preTitle="Overview">
-        <Link to="/containers/new" className="btn btn-success">
+        <ButtonLink color="green" to="/containers/new">
           Create
-        </Link>
+        </ButtonLink>
       </Header>
 
       <Container>

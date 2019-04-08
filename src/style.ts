@@ -13,6 +13,7 @@ type Theme = {
     green: string
     redDark: string
     red: string
+    muted: string
   }
 }
 
@@ -29,6 +30,7 @@ export const theme: Theme = {
     green: "#15cd72",
     redDark: "#9a0007",
     red: "#d32f2f",
+    muted: "#6c757d",
   },
 }
 

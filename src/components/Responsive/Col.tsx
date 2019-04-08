@@ -28,7 +28,7 @@ export default styled.div<IProps>(props => {
     align-self: ${props.alignSelf || "inherit"};
     justify-self: ${props.justifySelf || "inherit"};
     width: ${props.auto ? "auto" : "100%"};
-    flex: ${flex(props.extraSmall || 12)};
+    flex: ${flex(props.extraSmall || (props.auto ? undefined : 12))};
     padding: 0 15px;
     
     ${props.small && css`

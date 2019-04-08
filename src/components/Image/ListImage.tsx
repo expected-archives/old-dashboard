@@ -19,7 +19,7 @@ export default () => {
       <Container>
         <Card title="hello">
           <CardBody>
-            <p>Hell oworld</p>
+            <p className="text-muted">Hell oworld</p>
             <Dropdown overlay={overlay}>
               <DropdownButton href="#">
                 Click me

@@ -1,7 +1,7 @@
 import React from "react"
 import { Header } from "../Layout"
-import { Form, FormGroup, FormSection } from "../Form"
-import { Container } from "../Responsive"
+import { Form, FormGroup, FormSection, Input, Select } from "../Form"
+import { Col, Container, Row } from "../Responsive"
 
 // col-12 col-lg-10 col-xl-8
 
@@ -26,7 +26,7 @@ export default () => {
           <FormSection name="Basic"
                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
             <FormGroup name="Name">
-              <input
+              <Input
                 type="text"
                 className="form-control"
                 placeholder="my-container"
@@ -36,7 +36,7 @@ export default () => {
             </FormGroup>
 
             <FormGroup name={"Image"}>
-              <input
+              <Input
                 type="text"
                 className="form-control"
                 placeholder="nginx:latest"
@@ -48,7 +48,7 @@ export default () => {
             <FormGroup
               name="Tags"
               description="This is how others will learn about the project, so make it good!">
-              <input
+              <Input
                 type="text"
                 className="form-control"
                 name="tags"
@@ -60,28 +60,26 @@ export default () => {
           <FormSection name="Choose a plan"
                        description=" do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
             <FormGroup name="Select a size">
-              <select
+              <Select
                 className="form-control"
                 name="size"
                 onChange={handleChange}>
                 <option value="64">64mb</option>
                 <option value="128">128mb</option>
                 <option value="256">256mb</option>
-              </select>
+              </Select>
             </FormGroup>
           </FormSection>
 
-          <div className="row justify-content-end">
-            <div className="col-12 col-lg-10 col-xl-8">
+          <Row justifyContent="flex-end">
+            <Col medium={12} large={10} extraLarge={8}>
               <button className="btn btn-success p-2 btn-block">
                 Create
               </button>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </Form>
       </Container>
-
-
     </>
   )
 }

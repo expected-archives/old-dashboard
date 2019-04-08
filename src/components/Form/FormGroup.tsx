@@ -21,7 +21,7 @@ const Description = styled.small`
   display: block;
   margin-top: 0;
   margin-bottom: 0.5rem;
-  color: ${props => props.theme.color.greyDark};
+  color: ${props => props.theme.color.muted};
   font-size: 80%;
   font-weight: 400;
 `

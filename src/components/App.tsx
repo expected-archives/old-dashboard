@@ -1,10 +1,11 @@
 import React from "react"
 import { Redirect, Route, Switch } from "react-router-dom"
-import { ListContainer, NewContainer } from "./components/Container"
-import { ListImage } from "./components/Image"
-import { Account } from "./components/Account"
-import { Nav, Navbar, NavbarBrand, NavItem, NavLink } from "./components/Nav"
-import { styled } from "./style"
+import { ListContainer, NewContainer } from "./Container"
+import { ListImage } from "./Image"
+import { Account } from "./Account"
+import { Nav, Navbar, NavbarBrand, NavItem, NavLink } from "./Nav"
+import { styled } from "../style"
+import { Footer } from "./Layout"
 
 const Name = styled.span`
   color: rgba(255, 255, 255, 0.5);
@@ -40,10 +41,8 @@ export default () => (
       <Redirect from="/" to="/containers"/>
     </Switch>
 
-    <div className="footer">
-      <p className="text-muted">
-        &copy; Expected.sh - All Rights Reserved 2019
-      </p>
-    </div>
+    <Footer>
+      &copy; Expected.sh - All Rights Reserved 2019
+    </Footer>
   </>
 )

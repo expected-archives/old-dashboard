@@ -4,7 +4,7 @@ import { Router } from "react-router"
 import { createBrowserHistory } from "history"
 import { ThemeProvider } from "emotion-theming"
 import { theme } from "./style"
-import App from "./App"
+import App from "./components/App"
 import "./styles/index.scss"
 
 const history = createBrowserHistory()
@@ -16,4 +16,3 @@ ReactDOM.render((
     </Router>
   </ThemeProvider>
 ), document.getElementById("root"))
-

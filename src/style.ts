@@ -41,7 +41,3 @@ export const theme: Theme = {
 }
 
 export const styled: CreateStyled<Theme> = emotionStyled
-
-export const globalStyle = {
-
-}

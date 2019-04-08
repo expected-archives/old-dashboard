@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { getAccount, regenerateApiKey, syncAccount } from "../../client"
 import { Header } from "../Layout"
-import { FormGroup, FormSection } from "../Form"
+import { FormGroup, FormSection, Input } from "../Form"
 import { usePromise } from "../../hooks"
 import Container from "../Responsive/Container"
 import Loader from "../Loader/Loader"
@@ -36,8 +36,9 @@ export default () => {
   }
 
   return (
-    <div>
+    <>
       <Header title="Account" preTitle="Overview"/>
+
       <Container>
         {error && (
           <p>Error: {error.message}...</p>
@@ -51,10 +52,10 @@ export default () => {
           <FormSection name="Profile"
                        description="Your email address is your identity on Expected and is used to log in.">
             <FormGroup name="Email">
-              <input type="email" className="form-control" name="email" value={data ? data.email : ""} disabled/>
+              <Input type="email" className="form-control" name="email" value={data ? data.email : ""} disabled/>
             </FormGroup>
             <FormGroup name="Name">
-              <input type="text" className="form-control" name="name" value={data ? data.name : ""} disabled/>
+              <Input type="text" className="form-control" name="name" value={data ? data.name : ""} disabled/>
             </FormGroup>
             <button className="btn btn-outline-primary" onClick={syncAccountHandler}>
               Sync with GitHub
@@ -63,7 +64,7 @@ export default () => {
           <FormSection name="API Key">
             <div className="form-row form-group">
               <div className="col-10">
-                <input type={reveal ? "text" : "password"} className="form-control" name="name"
+                <Input type={reveal ? "text" : "password"} className="form-control" name="name"
                        value={data ? data.apiKey : ""}
                        disabled/>
               </div>
@@ -73,14 +74,14 @@ export default () => {
                 </button>
               </div>
             </div>
-            <div className="form-group">
+            <FormGroup>
               <button className="btn btn-success" onClick={regenerateApiKeyHandler}>
                 Regenerate API Key
               </button>
-            </div>
+            </FormGroup>
           </FormSection>
         </Loader>
       </Container>
-    </div>
+    </>
   )
 }

@@ -8,7 +8,7 @@ export default styled.input`
   font-size: .9375rem;
   font-weight: 400;
   line-height: 1.5;
-  color: ${props => props.theme.color.muted};
+  color: ${props => props.theme.text.normal};
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid ${props => props.theme.color.grey};
@@ -19,5 +19,9 @@ export default styled.input`
     outline: none;
     box-shadow: none;
     border-color: #1890ff;
+  }
+  
+  &:disabled, &[readonly] {
+    background: ${props => props.theme.color.grey};
   }
 `

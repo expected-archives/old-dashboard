@@ -21,7 +21,7 @@ const FormSection = styled(Row)`
 `
 
 const Description = styled.p`
-  color: ${props => props.theme.color.muted};
+  color: ${props => props.theme.text.muted};
 `
 
 export default ({ name, description, children }: IProps) => (

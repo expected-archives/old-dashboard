@@ -20,7 +20,7 @@ export default styled.div<IProps>(props => {
     const grow = Number(!(props.auto || props.extraSmall || props.small ||
       props.medium || props.large || props.extraLarge))
     const width = size ? ((size / 12) * 100) : (props.auto ? "auto" : "")
-    return `${grow} 0 ${width}`
+    return `${grow} 0 ${width}%`
   }
 
   return css`
@@ -29,6 +29,7 @@ export default styled.div<IProps>(props => {
     justify-self: ${props.justifySelf || "inherit"};
     width: ${props.auto ? "auto" : "100%"};
     flex: ${flex(props.extraSmall)};
+    padding: 0 15px;
     
     @media (min-width: 576px) {
       flex: ${flex(props.small)};

@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react"
-import { styled } from "../style"
-import { Col, Container, Row } from "./Responsive"
+import { styled } from "../../style"
+import { Col, Container, Row } from "../Responsive"
 
 interface IProps {
   title: string

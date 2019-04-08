@@ -6,7 +6,7 @@ import { Container } from "../Responsive"
 import { Link } from "react-router-dom"
 import TimeAgo from "react-timeago"
 import { Card, CardBody, CardTable } from "../Card"
-import Loader from "../Loader"
+import Loader from "../Loader/Loader"
 import { Dropdown, DropdownButton, DropdownContent, DropdownItem } from "../Dropdown"
 
 const columns = [

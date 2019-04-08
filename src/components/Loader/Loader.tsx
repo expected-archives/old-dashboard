@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react"
 import { keyframes } from "@emotion/core"
-import { styled } from "../style"
+import { styled } from "../../style"
 
 interface IProps {
   loading?: boolean

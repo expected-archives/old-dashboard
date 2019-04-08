@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react"
+import { Col, Row } from "../Responsive"
 
 interface IProps {
   name: string
@@ -7,17 +8,17 @@ interface IProps {
 }
 
 export default ({ name, description, children }: IProps) => (
-  <div className="row form-section">
-    <div className="col-md-4">
+  <Row className="form-section">
+    <Col  medium={4}>
       <h3>{name}</h3>
       {description && (
         <p className="text-muted">
           {description}
         </p>
       )}
-    </div>
-    <div className="col-md-8">
+    </Col>
+    <Col medium={8}>
       {children}
-    </div>
-  </div>
+    </Col>
+  </Row>
 )

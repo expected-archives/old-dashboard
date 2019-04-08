@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react"
+import { styled } from "../../style"
 
 interface IProps {
   name?: string
@@ -6,18 +7,37 @@ interface IProps {
   children: ReactNode
 }
 
+const FormGroup = styled.div`
+  margin-bottom: 1rem;
+`
+
+const Label = styled.label`
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: .9375rem;
+`
+
+const Description = styled.small`
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: ${props => props.theme.color.greyDark};
+  font-size: 80%;
+  font-weight: 400;
+`
+
 export default ({ name, description, children }: IProps) => (
-  <div className="form-group">
+  <FormGroup>
     {name && (
-      <label>
+      <Label>
         {name}
-      </label>
+      </Label>
     )}
     {description && (
-      <small className="form-text text-muted">
+      <Description>
         {description}
-      </small>
+      </Description>
     )}
     {children}
-  </div>
+  </FormGroup>
 )

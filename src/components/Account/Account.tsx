@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { getAccount, regenerateApiKey, syncAccount } from "../../client"
-import { FormGroup, FormSection, Header } from ".."
+import { Header } from "../Layout"
+import { FormGroup, FormSection } from "../Form"
 import { usePromise } from "../../hooks"
 import Container from "../Responsive/Container"
 import Loader from "../Loader/Loader"
@@ -62,7 +63,8 @@ export default () => {
           <FormSection name="API Key">
             <div className="form-row form-group">
               <div className="col-10">
-                <input type={reveal ? "text" : "password"} className="form-control" name="name" value={data ? data.apiKey : ""}
+                <input type={reveal ? "text" : "password"} className="form-control" name="name"
+                       value={data ? data.apiKey : ""}
                        disabled/>
               </div>
               <div className="col">

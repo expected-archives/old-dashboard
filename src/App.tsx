@@ -1,7 +1,9 @@
 import React from "react"
 import { Redirect, Route, Switch } from "react-router-dom"
-import { Account, ListContainer, ListImage, NewContainer } from "./components"
-import { Nav, Navbar, NavbarBrand, NavLink, NavItem } from "./components/Nav"
+import { ListContainer, NewContainer } from "./components/Container"
+import { ListImage } from "./components/Image"
+import { Account } from "./components/Account"
+import { Nav, Navbar, NavbarBrand, NavItem, NavLink } from "./components/Nav"
 import { styled } from "./style"
 
 const Name = styled.span`

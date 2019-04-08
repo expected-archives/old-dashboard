@@ -1,5 +1,7 @@
 import React from "react"
-import { Form, FormGroup, FormSection, Header } from ".."
+import { Header } from "../Layout"
+import { Form, FormGroup, FormSection } from "../Form"
+import { Container } from "../Responsive"
 
 // col-12 col-lg-10 col-xl-8
 
@@ -19,7 +21,7 @@ export default () => {
     <>
       <Header preTitle="Containers" title="Create a new container"/>
 
-      <div className="container">
+      <Container>
         <Form onSubmit={handleSubmit}>
           <FormSection name="Basic"
                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
@@ -77,7 +79,7 @@ export default () => {
             </div>
           </div>
         </Form>
-      </div>
+      </Container>
 
 
     </>

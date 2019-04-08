@@ -1,5 +1,5 @@
 import React from "react"
-import { Header } from ".."
+import { Header } from "../Layout"
 import { Card, CardBody } from "../Card"
 import Container from "../Responsive/Container"
 import { Dropdown, DropdownButton, DropdownContent, DropdownItem } from "../Dropdown"

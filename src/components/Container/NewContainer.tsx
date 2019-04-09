@@ -1,6 +1,6 @@
 import React from "react"
 import { Header } from "../Layout"
-import { Form, FormGroup, FormSection, Input, Select } from "../Form"
+import { Button, Form, FormGroup, FormSection, Input, Select } from "../Form"
 import { Col, Container, Row } from "../Responsive"
 
 // col-12 col-lg-10 col-xl-8
@@ -73,9 +73,9 @@ export default () => {
 
           <Row justifyContent="flex-end">
             <Col medium={12} large={10} extraLarge={8}>
-              <button className="btn btn-success p-2 btn-block">
+              <Button color="green" block>
                 Create
-              </button>
+              </Button>
             </Col>
           </Row>
         </Form>

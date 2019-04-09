@@ -5,7 +5,7 @@ import { createBrowserHistory } from "history"
 import { ThemeProvider } from "emotion-theming"
 import { theme } from "./style"
 import App from "./components/App"
-import "./styles/index.scss"
+import "./index.css"
 
 const history = createBrowserHistory()
 

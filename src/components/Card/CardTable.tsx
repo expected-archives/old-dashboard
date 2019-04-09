@@ -1,7 +1,6 @@
-/** @jsx jsx */
 import React, { ReactNode } from "react"
 import { styled } from "../../style"
-import { css, jsx } from "@emotion/core"
+import { css } from "@emotion/core"
 
 interface IColumn {
   title: string

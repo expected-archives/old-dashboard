@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react"
 import { styled } from "../../style"
-import { css } from "@emotion/core"
 
 interface IColumn {
   title: string
@@ -17,8 +16,6 @@ interface IProps<T> {
 
 const Table = styled.table`
   width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   
   th {
     color: ${props => props.theme.color.dark};
@@ -53,7 +50,7 @@ export default <T, >({ columns, dataSource = [], onRowClick }: IProps<T>) => {
       <thead>
         <tr>
           {columns.map(({ title: columnTitle, align }, index) => (
-            <th key={index} css={css`text-align: ${align || "left"}`}>
+            <th key={index} style={{ textAlign: align || "left" }}>
               {columnTitle}
             </th>
           ))}
@@ -63,10 +60,10 @@ export default <T, >({ columns, dataSource = [], onRowClick }: IProps<T>) => {
         {dataSource.map((data: any, index) => (
           <tr key={index} onClick={onClick(data)}>
             {columns.map(({ key, align, render }, index) => (
-              <td key={index} css={css`
-                text-align: ${align || "left"};
-                vertical-align: middle;
-              `}>
+              <td key={index} style={{
+                textAlign: align || "left",
+                verticalAlign: "middle",
+              }}>
                 {render ? render(data[key]) : data[key]}
               </td>
             ))}

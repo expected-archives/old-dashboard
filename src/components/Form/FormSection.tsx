@@ -26,7 +26,7 @@ const Description = styled.p`
 
 export default ({ name, description, children }: IProps) => (
   <FormSection>
-    <Col medium={4}>
+    <Col extraSmall={12} medium={4}>
       <h3>{name}</h3>
       {description && (
         <Description>
@@ -34,7 +34,7 @@ export default ({ name, description, children }: IProps) => (
         </Description>
       )}
     </Col>
-    <Col medium={8}>
+    <Col extraSmall={12} medium={8}>
       {children}
     </Col>
   </FormSection>

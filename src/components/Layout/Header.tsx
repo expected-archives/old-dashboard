@@ -36,7 +36,7 @@ export default ({ title, preTitle, children }: IProps) => (
           <Title>{title}</Title>
         </Col>
         {children && (
-          <Col auto alignSelf="center">
+          <Col extraSmall="auto" alignSelf="center">
             {children}
           </Col>
         )}

@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export interface Account {
+export interface IAccount {
   id: string;
   name: string;
   email: string;
@@ -10,7 +10,7 @@ export interface Account {
   createdAt: Date;
 }
 
-export interface Container {
+export interface IContainer {
   key: string
   name: string
   status: string
@@ -33,7 +33,7 @@ const remapFields = (obj: any, fields: any): any =>
     .map(([key, value]) => [fields[key] || key, value])
     .reduce((prev, [key, value]) => ({ ...prev, [key]: value }), {})
 
-const toAccount = (data: object): Account => {
+const toAccount = (data: object): IAccount => {
   const account = remapFields(data, {
     avatar_url: "avatarUrl",
     api_key: "apiKey",
@@ -43,7 +43,7 @@ const toAccount = (data: object): Account => {
   return account
 }
 
-const toContainer = (data: object): Container => {
+const toContainer = (data: object): IContainer => {
   const container = remapFields(data, {
     created_at: "createdAt",
   })
@@ -62,7 +62,7 @@ export const client = axios.create({
   },
 })
 
-export const getAccount = (): Promise<Account> =>
+export const getAccount = (): Promise<IAccount> =>
   client.get("/v1/account").then((res) => {
     if (res.status !== 200) {
       throw new Error(res.data.message)
@@ -70,7 +70,7 @@ export const getAccount = (): Promise<Account> =>
     return toAccount(res.data.account)
   })
 
-export const syncAccount = (): Promise<Account> =>
+export const syncAccount = (): Promise<IAccount> =>
   client.post("/v1/account/sync").then((res) => {
     if (res.status !== 200) {
       throw new Error(res.data.message)
@@ -78,7 +78,7 @@ export const syncAccount = (): Promise<Account> =>
     return toAccount(res.data.account)
   })
 
-export const regenerateApiKey = (): Promise<Account> =>
+export const regenerateApiKey = (): Promise<IAccount> =>
   client.post("/v1/account/regenerate_apikey").then((res) => {
     if (res.status !== 200) {
       throw new Error(res.data.message)
@@ -86,7 +86,7 @@ export const regenerateApiKey = (): Promise<Account> =>
     return toAccount(res.data.account)
   })
 
-export const getContainers = (): Promise<Container[]> =>
+export const getContainers = (): Promise<IContainer[]> =>
   client.get("/v1/containers").then((res) => {
     if (res.status !== 200) {
       throw new Error(res.data.message)
@@ -94,7 +94,7 @@ export const getContainers = (): Promise<Container[]> =>
     return res.data.containers.map((data: object) => toContainer(data))
   })
 
-export const createContainer = (req: CreateContainerRequest): Promise<Container> =>
+export const createContainer = (req: CreateContainerRequest): Promise<IContainer> =>
   client.post("/v1/containers", req)
     .then((res) => {
       if (res.status !== 200) {

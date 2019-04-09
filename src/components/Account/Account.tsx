@@ -3,8 +3,8 @@ import { getAccount, regenerateApiKey, syncAccount } from "../../client"
 import { Header } from "../Layout"
 import { FormGroup, FormSection, Input } from "../Form"
 import { usePromise } from "../../hooks"
-import Container from "../Responsive/Container"
-import Loader from "../Loader/Loader"
+import { Container } from "../Responsive"
+import { Loader } from "../Loader"
 
 export default () => {
   const { loading, data, error, dispatch } = usePromise(() => getAccount(), [])

@@ -1,14 +1,23 @@
+import React from "react"
+import TimeAgo from "react-timeago"
 import { usePromise } from "../../hooks"
 import { getContainers, IContainer } from "../../client"
-import React from "react"
 import { Header } from "../Layout"
 import { Container } from "../Responsive"
-import { Link } from "react-router-dom"
-import TimeAgo from "react-timeago"
 import { Card, CardTable } from "../Card"
-import Loader from "../Loader/Loader"
+import { Loader } from "../Loader"
 import { Dropdown, DropdownButton, DropdownContent, DropdownItem } from "../Dropdown"
 import { ButtonLink } from "../Form"
+import { styled } from "../../style"
+
+const Tag = styled.div`
+  display: inline;
+  background: ${props => props.theme.color.dark};
+  color: ${props => props.theme.color.light};
+  padding: 2px 12px;
+  margin-right: 5px;
+  border-radius: 15px;
+`
 
 const columns = [
   // {
@@ -46,7 +55,7 @@ const columns = [
     render: (tags: any) => (
       <>
         {tags.map((tag: string, index: number) => (
-          <div key={index} className="tag">{tag}</div>
+          <Tag key={index}>{tag}</Tag>
         ))}
       </>
     ),

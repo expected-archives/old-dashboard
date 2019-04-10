@@ -1,7 +1,7 @@
 import { styled, theme } from "../../style"
 import { Input } from "./Input";
 
-import React, { ChangeEvent, FocusEventHandler, KeyboardEventHandler, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 
 const AutocompleteInput = styled(Input)`
 `
@@ -10,8 +10,10 @@ const AutocompleteItems = styled.div`
   margin-top: 10px;
   border-radius: 0.25rem;
   position: absolute;
+  display: block;
   z-index: 99;
   border: 1px solid ${theme.color.grey};
+  width: 100%;
 `
 
 const AutocompleteItem = styled.div`
@@ -35,11 +37,16 @@ export default ({ name, onChange, suggestions, tags = false }: IProps) => {
   const [completions, setCompletions] = useState<string[]>([])
   const [value, setValue] = useState("")
   const [selectedIndex, setSelectedIndex] = useState(-1)
+  const [id] = useState('_' + Math.random().toString(36).substr(2, 9))
 
   useEffect(() => {
-    const blur = (_: any) => hide()
-    document.addEventListener("click", blur)
-    return () => document.removeEventListener("click", blur)
+    const focusOut = (_: any) => hide()
+    document.addEventListener("click", focusOut)
+    window.addEventListener("resize", focusOut)
+    return () => {
+      document.removeEventListener("click", focusOut)
+      window.removeEventListener("resize", focusOut)
+    }
   })
 
   const change = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -49,15 +56,15 @@ export default ({ name, onChange, suggestions, tags = false }: IProps) => {
   }
 
   const select = (val: string) => {
-    setValue(val);
+    setValue(val)
     hide()
+    onChange({target: {name, value: val}} as ChangeEvent<HTMLInputElement>)
   }
 
   const hide = () => {
     setSelectedIndex(-1)
     setCompletions([])
   }
-
 
   const key = (e: any) => {
     const down = () => setSelectedIndex(selectedIndex + 1 > completions.length - 1 ? 0 : selectedIndex + 1)
@@ -70,16 +77,21 @@ export default ({ name, onChange, suggestions, tags = false }: IProps) => {
       e.preventDefault()
       select(completions[selectedIndex])
     }
+  }
 
+  const getSize = () => {
+    const d = document.getElementById(id)
+    if (d) return d.offsetWidth + "px"
+    else return '100%'
   }
 
   return (
-    <div onKeyDown={key}>
-      <AutocompleteInput value={value} name={name} onChange={change} autoComplete="off"/>
+    <div  onKeyDown={key} style={{width: '100%'}}>
+      <AutocompleteInput id={id} value={value} name={name} onChange={change} autoComplete="off"/>
       {
         completions.length > 0
           ?
-          <AutocompleteItems>
+          <AutocompleteItems style={{width: getSize()}}>
             {completions.map((val, index) =>
               (<AutocompleteItem style={index !== selectedIndex ? {} : { background: theme.color.grey }}
                                  onClick={(_) => select(val)} key={index}>{val}</AutocompleteItem>))

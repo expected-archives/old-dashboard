@@ -8,7 +8,7 @@ import AutocompleteInput from "../Form/AutocompleteInput";
 const test = () => new Promise((resolve, reject) => setTimeout(resolve, 4000))
 
 export default () => {
-  const { loading, error, handleChange, handleSubmit, dispatch, values } = useForm({
+  const { loading, error,   handleChange, handleSubmit, dispatch, values } = useForm({
     name: "",
     image: "",
     size: "",

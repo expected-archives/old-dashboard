@@ -36,13 +36,10 @@ export default ({ name, onChange, suggestions, tags = false }: IProps) => {
 
   let [completions, setCompletions] = useState([] as string[])
   let [value, setValue] = useState("")
+  let [selectedIndex, setSelectedIndex] = useState(-1)
 
   useEffect(() => {
-    const blur = (ev: any) => {
-      if (!Array.from(document.getElementsByClassName("autocomplete-item")).some(e => e === ev)) {
-        setCompletions([])
-      }
-    }
+    const blur = (_: any) => hide()
     document.addEventListener("click", blur)
     return () => document.removeEventListener("click", blur)
   })
@@ -54,23 +51,27 @@ export default ({ name, onChange, suggestions, tags = false }: IProps) => {
   }
 
   const select = (val: string) => {
-    console.log("value", val)
-    setCompletions([])
     setValue(val);
+    hide()
   }
 
+  const hide = () => {
+    setSelectedIndex(-1)
+    setCompletions([])
+  }
+
+
+
   const key = (e: any) => {
-    console.log(e.keyCode)
-    switch (e.keyCode) {
-      // esc
-      case 27:
-        setCompletions([])
-        break
-      // down
-      case 40:
-      // up
-      case 38:
-    }
+
+    const down = () => setSelectedIndex(selectedIndex + 1 > completions.length - 1 ? 0 : selectedIndex + 1)
+    const up = () => setSelectedIndex(selectedIndex + 1 > completions.length - 1 ? 0 : selectedIndex + 1)
+
+    if (e.keyCode === 27) hide()
+    else if (e.keyCode === 40) down()
+    else if (e.keyCode === 38) up()
+    else if (e.keyCode === 13) select(completions[selectedIndex]) //todo change this ?
+
   }
 
   return (
@@ -80,10 +81,14 @@ export default ({ name, onChange, suggestions, tags = false }: IProps) => {
         completions.length > 0
           ?
           <AutocompleteItems>
-            {completions.map((val, index) => (<AutocompleteItem onClick={(_) => {
-              console.log(val)
-              select(val)
-            }} className={"autocomplete-item"} key={index}>{val}</AutocompleteItem>))}
+            {completions.map((val, index) => {
+              if (index !== selectedIndex)
+                return (<AutocompleteItem onClick={(_) => select(val)} key={index}>{val}</AutocompleteItem>)
+              else
+                return (<AutocompleteItem onClick={(_) => select(val)}
+                                          style={{ background: theme.color.grey}} key={index}>{val}</AutocompleteItem>)
+              }
+            )}
           </AutocompleteItems>
           : <></>
       }

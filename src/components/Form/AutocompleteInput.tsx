@@ -23,12 +23,10 @@ const AutocompleteItem = styled.div`
   }
 `
 
-type event = ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-
 interface IProps {
   suggestions: string[]
   tags?: boolean,
-  onChange: (event: event) => void
+  onChange: (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void
   name: string
 }
 
@@ -44,7 +42,7 @@ export default ({ name, onChange, suggestions, tags = false }: IProps) => {
     return () => document.removeEventListener("click", blur)
   })
 
-  const change = (e: event) => {
+  const change = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setValue(e.target.value)
     setCompletions(suggestions.filter(x => e.target.value.length > 0 && x.startsWith(e.target.value)))
     onChange(e)
@@ -82,14 +80,10 @@ export default ({ name, onChange, suggestions, tags = false }: IProps) => {
         completions.length > 0
           ?
           <AutocompleteItems>
-            {completions.map((val, index) => {
-              if (index !== selectedIndex)
-                return (<AutocompleteItem onClick={(_) => select(val)} key={index}>{val}</AutocompleteItem>)
-              else
-                return (<AutocompleteItem onClick={(_) => select(val)}
-                                          style={{ background: theme.color.grey}} key={index}>{val}</AutocompleteItem>)
-              }
-            )}
+            {completions.map((val, index) =>
+              (<AutocompleteItem style={index !== selectedIndex ? {} : { background: theme.color.grey }}
+                                 onClick={(_) => select(val)} key={index}>{val}</AutocompleteItem>))
+            }
           </AutocompleteItems>
           : <></>
       }

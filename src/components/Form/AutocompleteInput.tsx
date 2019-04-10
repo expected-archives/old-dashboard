@@ -63,7 +63,7 @@ export default ({ name, onChange, suggestions, tags = false }: IProps) => {
     const down = () => setSelectedIndex(selectedIndex + 1 > completions.length - 1 ? 0 : selectedIndex + 1)
     const up = () => setSelectedIndex(selectedIndex + 1 > completions.length - 1 ? 0 : selectedIndex + 1)
 
-    if (e.keyCode === 27) hide()
+    if (e.keyCode === 27 || e.keyCode === 9) hide()
     else if (e.keyCode === 40) down()
     else if (e.keyCode === 38) up()
     else if (e.keyCode === 13) {

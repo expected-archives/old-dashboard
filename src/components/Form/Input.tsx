@@ -1,6 +1,5 @@
 import { styled } from "../../style"
 
-
 export const Input = styled.input`
   display: block;
   width: 100%;

@@ -34,9 +34,9 @@ interface IProps {
 
 export default ({ name, onChange, suggestions, tags = false }: IProps) => {
 
-  let [completions, setCompletions] = useState([] as string[])
-  let [value, setValue] = useState("")
-  let [selectedIndex, setSelectedIndex] = useState(-1)
+  const [completions, setCompletions] = useState<string[]>([])
+  const [value, setValue] = useState("")
+  const [selectedIndex, setSelectedIndex] = useState(-1)
 
   useEffect(() => {
     const blur = (_: any) => hide()
@@ -61,16 +61,17 @@ export default ({ name, onChange, suggestions, tags = false }: IProps) => {
   }
 
 
-
   const key = (e: any) => {
-
     const down = () => setSelectedIndex(selectedIndex + 1 > completions.length - 1 ? 0 : selectedIndex + 1)
     const up = () => setSelectedIndex(selectedIndex + 1 > completions.length - 1 ? 0 : selectedIndex + 1)
 
     if (e.keyCode === 27) hide()
     else if (e.keyCode === 40) down()
     else if (e.keyCode === 38) up()
-    else if (e.keyCode === 13) select(completions[selectedIndex]) //todo change this ?
+    else if (e.keyCode === 13) {
+      e.preventDefault()
+      select(completions[selectedIndex])
+    }
 
   }
 

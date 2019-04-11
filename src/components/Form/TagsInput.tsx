@@ -2,11 +2,11 @@ import { styled, theme } from "../../style"
 import React, { ChangeEvent, useEffect, useState } from "react";
 
 const Input = styled.input`
+  width: auto;
   margin-bottom: 5px;
-  flex-grow:0;
-  flex-shrink:0;
+  flex-grow: 1;
+  flex-shrink: 0;
   border: none;
-  width: 285px;
   outline: none;
   box-shadow: none;
   font-size: .9375rem;
@@ -89,7 +89,7 @@ interface IProps {
   placeholder: string,
 }
 
-export default ({ name, onChange, suggestions, placeholder = ""}: IProps) => {
+export default ({ name, onChange, suggestions, placeholder = "" }: IProps) => {
 
   const [completions, setCompletions] = useState<string[]>([])
   const [value, setValue] = useState("")
@@ -128,7 +128,6 @@ export default ({ name, onChange, suggestions, placeholder = ""}: IProps) => {
   })
 
 
-
   const change = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     hideTagsIndex()
     setValue(e.target.value)
@@ -154,7 +153,7 @@ export default ({ name, onChange, suggestions, placeholder = ""}: IProps) => {
     setCompletionIndex(-1)
     setCompletions([])
   }
-  
+
   const hideTagsIndex = () => setTagsIndex(-1)
 
   const clickTag = (e: any, tagIndex: number) => {
@@ -224,16 +223,19 @@ export default ({ name, onChange, suggestions, placeholder = ""}: IProps) => {
     <div onKeyDown={key}>
       <Autocomplete id={id}>
         {Array.from(tags).map((tag, index) =>
-          (<Tag className={"tag"} onClick={(e) => clickTag(e, index)} style={index !== tagsIndex ? {} : { background: theme.color.dark }} key={index}>{tag}</Tag>))
+          (<Tag className={"tag"} onClick={(e) => clickTag(e, index)}
+                style={index !== tagsIndex ? {} : { background: theme.color.dark }} key={index}>{tag}</Tag>))
         }
-        <Input id={idInput} type="text" placeholder={placeholder} name={name} value={value} onChange={change} autoComplete="off"/>
+        <Input id={idInput} type="text" placeholder={placeholder} name={name} value={value} onChange={change}
+               autoComplete="off"/>
       </Autocomplete>
       {
         completions.length > 0
           ?
           <AutocompleteItems style={{ width: sizeOfInput() }}>
             {completions.map((val, index) =>
-              (<AutocompleteItem className={"autocomplete-item"} style={index !== completionIndex ? {} : { background: theme.color.grey }}
+              (<AutocompleteItem className={"autocomplete-item"}
+                                 style={index !== completionIndex ? {} : { background: theme.color.grey }}
                                  onClick={(e) => clickCompletion(e, val)} key={index}>{val}</AutocompleteItem>))
             }
           </AutocompleteItems>

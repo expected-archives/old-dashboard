@@ -37,7 +37,7 @@ export default () => {
 
             <FormGroup name="Tags"
                        description="This is how others will learn about the project, so make it good!">
-              <AutocompleteInput name="tags" suggestions={["hello", "world", "hello world", "hai!"]} onChange={handleChange}/>
+              <AutocompleteInput hasTags={true} name="tags" placeholder={"Type tags here"} suggestions={["hello", "world", "hello world", "hai!"]} onChange={handleChange}/>
             </FormGroup>
           </FormSection>
 

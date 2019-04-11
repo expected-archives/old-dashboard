@@ -51,7 +51,7 @@ const columns = [
   },
   {
     title: "Tags",
-    key: "tags",
+    key: "hasTags",
     render: (tags: any) => (
       <>
         {tags.map((tag: string, index: number) => (

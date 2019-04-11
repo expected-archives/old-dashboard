@@ -52,12 +52,6 @@ const Autocomplete = styled.div`
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   
-  &:focus {
-    outline: none;
-    box-shadow: none;
-    border-color: ${props => props.theme.color.blue};
-  }
-  
   &:disabled, &[readonly] {
     background: ${props => props.theme.color.grey};
   }
@@ -94,6 +88,7 @@ export default ({ name, onChange, suggestions, placeholder = "" }: IProps) => {
   const [completions, setCompletions] = useState<string[]>([])
   const [value, setValue] = useState("")
   const [completionIndex, setCompletionIndex] = useState(-1)
+  const [isFocused, setFocused] = useState(false)
   const [id] = useState('_' + Math.random().toString(36).substr(2, 9))
   const [idInput] = useState('_' + Math.random().toString(36).substr(2, 9))
 
@@ -108,8 +103,11 @@ export default ({ name, onChange, suggestions, placeholder = "" }: IProps) => {
   useEffect(() => {
     const focusOut = (event: any) => {
       hideCompletion()
-      if (event.type === "resize" || (!event.path[0].className.includes("tag") &&
+      if (event.type === "resize" ||
+        (!event.path[0].className.includes("tag") &&
+        !event.path[0].id.includes(idInput) &&
         !event.path[0].className.includes("autocomplete-item"))) {
+        setFocused(false)
         hideTagsIndex()
         if (value.trim().length !== 0) {
           addTags(value)
@@ -142,7 +140,6 @@ export default ({ name, onChange, suggestions, placeholder = "" }: IProps) => {
 
   const select = (val: string) => {
     if (val.trim().length !== 0) {
-      console.log(val)
       addTags(val)
       clean()
     }
@@ -175,7 +172,6 @@ export default ({ name, onChange, suggestions, placeholder = "" }: IProps) => {
 
   const focusInput = () => {
     const input = document.getElementById(idInput)
-    console.log(input)
     if (input) return input.focus()
   }
 
@@ -224,7 +220,7 @@ export default ({ name, onChange, suggestions, placeholder = "" }: IProps) => {
 
   return (
     <div onKeyDown={key}>
-      <Autocomplete id={id}>
+      <Autocomplete id={id} style={isFocused ? {borderColor: theme.color.blue} : {}} onFocus={(_) => setFocused(true)}>
         {Array.from(tags).map((tag, index) =>
           (<Tag className={"tag"} onClick={(e) => clickTag(e, index)}
                 style={index !== tagsIndex ? {} : { background: theme.color.dark }} key={index}>{tag}</Tag>))

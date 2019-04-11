@@ -37,7 +37,7 @@ export default () => {
 
             <FormGroup name="Tags"
                        description="This is how others will learn about the project, so make it good!">
-              <TagsInput name="tags" placeholder={"Type tags here"}
+              <TagsInput name="tags" placeholder={"Type tags here"} defaultTags={[]}
                                  suggestions={["hello", "world", "hello world", "hai!"]} onChange={(a) => console.log(a)}/>
             </FormGroup>
           </FormSection>

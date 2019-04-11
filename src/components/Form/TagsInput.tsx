@@ -81,9 +81,10 @@ interface IProps {
   onChange: (event: string[]) => void
   name: string,
   placeholder: string,
+  defaultTags: string[]
 }
 
-export default ({ name, onChange, suggestions, placeholder = "" }: IProps) => {
+export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [] }: IProps) => {
 
   const [completions, setCompletions] = useState<string[]>([])
   const [value, setValue] = useState("")
@@ -92,7 +93,7 @@ export default ({ name, onChange, suggestions, placeholder = "" }: IProps) => {
   const [id] = useState('_' + Math.random().toString(36).substr(2, 9))
   const [idInput] = useState('_' + Math.random().toString(36).substr(2, 9))
 
-  const [tags, setTags] = useState<Set<string>>(new Set(["world", "is", 'fun', "and", "it is fun to do that"]))
+  const [tags, setTags] = useState<Set<string>>(new Set(defaultTags))
   const [tagsIndex, setTagsIndex] = useState(-1)
 
   const updateTags = (list: Set<string>) => {
@@ -168,6 +169,7 @@ export default ({ name, onChange, suggestions, placeholder = "" }: IProps) => {
     addTags(completion)
     clean()
     hideCompletion()
+    focusInput()
   }
 
   const focusInput = () => {
@@ -191,6 +193,12 @@ export default ({ name, onChange, suggestions, placeholder = "" }: IProps) => {
     if (e.keyCode === 27 || e.keyCode === 9) {
       hideCompletion()
       if (e.keyCode !== 9) hideTagsIndex()
+      if (e.keyCode === 9 && tagsIndex !== -1) {
+        e.preventDefault()
+        tagsRight()
+      } else {
+        setFocused(false)
+      }
     }
     else if (e.keyCode === 40) completionDown()
     else if (e.keyCode === 38) completionUp()

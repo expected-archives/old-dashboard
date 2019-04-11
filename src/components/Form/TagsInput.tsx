@@ -192,11 +192,14 @@ export default ({ name, onChange, suggestions, placeholder = "" }: IProps) => {
 
     if (e.keyCode === 13) e.preventDefault()
 
-    if (e.keyCode === 27 || e.keyCode === 9) hideCompletion()
+    if (e.keyCode === 27 || e.keyCode === 9) {
+      hideCompletion()
+      if (e.keyCode !== 9) hideTagsIndex()
+    }
     else if (e.keyCode === 40) completionDown()
     else if (e.keyCode === 38) completionUp()
     else if (e.keyCode === 37 && value.trim().length === 0) tagsLeft()
-    else if (e.keyCode === 39 && value.trim().length === 0) tagsRight()
+    else if ((e.keyCode === 39) && value.trim().length === 0) tagsRight()
     else if (e.keyCode === 13 && completionIndex !== -1) select(completions[completionIndex])
     else if (e.keyCode === 13 && value.trim().length > 0 && completionIndex === -1) {
       select(value)

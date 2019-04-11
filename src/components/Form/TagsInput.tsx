@@ -1,5 +1,5 @@
 import { styled, theme } from "../../style"
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, ReactNode, useEffect, useState } from "react";
 
 const Input = styled.input`
   width: auto;
@@ -80,11 +80,16 @@ interface IProps {
   suggestions: string[]
   onChange: (event: string[]) => void
   name: string,
-  placeholder: string,
-  defaultTags: string[]
+  placeholder?: string,
+  defaultTags?: string[],
+  suggestionRender?: (suggest: string) => ReactNode
 }
 
-export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [] }: IProps) => {
+const defaultSuggestionRender = (suggest: string) => {
+  return <>{suggest}</>
+}
+
+export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [], suggestionRender = defaultSuggestionRender }: IProps) => {
 
   const [completions, setCompletions] = useState<string[]>([])
   const [value, setValue] = useState("")
@@ -243,7 +248,7 @@ export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [
             {completions.map((val, index) =>
               (<AutocompleteItem className={"autocomplete-item"}
                                  style={index !== completionIndex ? {} : { background: theme.color.grey }}
-                                 onClick={(e) => clickCompletion(e, val)} key={index}>{val}</AutocompleteItem>))
+                                 onClick={(e) => clickCompletion(e, val)} key={index}>{suggestionRender(val)}</AutocompleteItem>))
             }
           </AutocompleteItems>
           : <></>

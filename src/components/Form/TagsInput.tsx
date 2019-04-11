@@ -22,7 +22,7 @@ const Input = styled.input`
   }
 `
 
-const Tag = styled.span`
+const Tag = styled.p`
   margin-bottom: 0.375rem;
   border-radius: 3px;
   flex-grow:0;
@@ -30,9 +30,11 @@ const Tag = styled.span`
   background: ${theme.color.greyDark};
   color: white;
   display: inline-block;
-  text-align: center;
-  padding: 0.25rem;
+  max-width: 100%;
+  word-wrap: break-word;
+  padding: 0 0.5rem;
   margin-right: 0.5rem;
+  cursor: pointer;
 `
 
 const Autocomplete = styled.div`
@@ -82,24 +84,41 @@ const AutocompleteItem = styled.div`
 
 interface IProps {
   suggestions: string[]
-  hasTags?: boolean,
-  onChange: (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void
+  onChange: (event: string[]) => void
   name: string,
   placeholder: string,
 }
 
-export default ({ name, onChange, suggestions, placeholder = "", hasTags = false }: IProps) => {
+export default ({ name, onChange, suggestions, placeholder = ""}: IProps) => {
 
   const [completions, setCompletions] = useState<string[]>([])
   const [value, setValue] = useState("")
   const [completionIndex, setCompletionIndex] = useState(-1)
   const [id] = useState('_' + Math.random().toString(36).substr(2, 9))
+  const [idInput] = useState('_' + Math.random().toString(36).substr(2, 9))
 
-  const [tags, setTags] = useState<Set<string>>(new Set())
+  const [tags, setTags] = useState<Set<string>>(new Set(["world", "is", 'fun', "and", "it is fun to do that"]))
   const [tagsIndex, setTagsIndex] = useState(-1)
 
+  const updateTags = (list: Set<string>) => {
+    onChange(Array.from(list))
+    setTags(list)
+  }
+
   useEffect(() => {
-    const focusOut = (_: any) => hide()
+    const focusOut = (event: any) => {
+      hideCompletion()
+      if (event.type === "resize" || (!event.path[0].className.includes("tag") &&
+        !event.path[0].className.includes("autocomplete-item"))) {
+        hideTagsIndex()
+        if (value.trim().length !== 0) {
+          addTags(value)
+          clean()
+        }
+      } else {
+        event.preventDefault()
+      }
+    }
     document.addEventListener("click", focusOut)
     window.addEventListener("resize", focusOut)
     return () => {
@@ -108,58 +127,89 @@ export default ({ name, onChange, suggestions, placeholder = "", hasTags = false
     }
   })
 
+
+
   const change = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    hideTagsIndex()
     setValue(e.target.value)
     setCompletions(suggestions
       .filter(x => e.target.value.length > 0 && x.startsWith(e.target.value))
       .slice(0, 5))
-    onChange(e)
+  }
+
+  const clean = () => {
+    setValue("")
   }
 
   const select = (val: string) => {
-    if (hasTags && val.trim().length !== 0) {
+    if (val.trim().length !== 0) {
+      console.log(val)
       addTags(val)
-      select("")
-    } else {
-      setValue(val)
+      clean()
     }
-    hide()
-    onChange({ target: { name, value: val } } as ChangeEvent<HTMLInputElement>)
+    hideCompletion()
   }
 
-  const hide = () => {
+  const hideCompletion = () => {
     setCompletionIndex(-1)
     setCompletions([])
   }
+  
+  const hideTagsIndex = () => setTagsIndex(-1)
 
-  const addTags = (val: string) => setTags(new Set(Array.from(tags).concat([val])))
-  const removeTags = (val: string) => setTags(new Set(Array.from(tags).filter(e => e !== val)))
+  const clickTag = (e: any, tagIndex: number) => {
+    e.preventDefault()
+    setTagsIndex(tagIndex)
+    if (value.trim().length !== 0) {
+      addTags(value)
+      clean()
+    }
+    focusInput()
+  }
+
+  const clickCompletion = (e: any, completion: string) => {
+    e.preventDefault()
+    addTags(completion)
+    clean()
+    hideCompletion()
+  }
+
+  const focusInput = () => {
+    const input = document.getElementById(idInput)
+    console.log(input)
+    if (input) return input.focus()
+  }
+
+  const addTags = (val: string) => updateTags(new Set(Array.from(tags).concat([val])))
+  const removeTags = (val: string) => updateTags(new Set(Array.from(tags).filter(e => e !== val)))
 
   const key = (e: any) => {
 
     const completionDown = () => setCompletionIndex(completionIndex + 1 > completions.length - 1 ? 0 : completionIndex + 1)
-    const completionUp = () => setCompletionIndex(completionIndex - 1 < 0 ? completions.length - 1  : completionIndex - 1)
+    const completionUp = () => setCompletionIndex(completionIndex - 1 < 0 ? completions.length - 1 : completionIndex - 1)
 
-    const tagsRight = () => setTagsIndex(tagsIndex + 1 > completions.length - 1 ? 0 : tagsIndex + 1)
-    const tagsLeft = () => setTagsIndex(tagsIndex - 1 < 0 ? completions.length - 1  : tagsIndex - 1)
+    const tagsRight = () => setTagsIndex(tagsIndex + 1 > tags.size - 1 ? 0 : tagsIndex + 1)
+    const tagsLeft = () => setTagsIndex(tagsIndex - 1 < 0 ? tags.size - 1 : tagsIndex - 1)
 
-    console.log(e.keyCode)
+    if (e.keyCode === 13) e.preventDefault()
 
-    if (e.keyCode === 27 || e.keyCode === 9) hide()
+    if (e.keyCode === 27 || e.keyCode === 9) hideCompletion()
     else if (e.keyCode === 40) completionDown()
     else if (e.keyCode === 38) completionUp()
-    else if (e.keyCode === 37) tagsLeft()
-    else if (e.keyCode === 39) tagsRight()
-    else if (e.keyCode === 13 && completionIndex !== -1) {
-      e.preventDefault()
-      select(completions[completionIndex])
-    } else if (e.keyCode === 13 && hasTags && value.trim().length > 0 && completionIndex === -1) {
-      e.preventDefault()
+    else if (e.keyCode === 37 && value.trim().length === 0) tagsLeft()
+    else if (e.keyCode === 39 && value.trim().length === 0) tagsRight()
+    else if (e.keyCode === 13 && completionIndex !== -1) select(completions[completionIndex])
+    else if (e.keyCode === 13 && value.trim().length > 0 && completionIndex === -1) {
       select(value)
-      select("")
-    } else if (e.keyCode === 8 && hasTags && value.trim().length === 0) {
-      if (tags.size > 0) {
+      clean()
+    } else if (e.keyCode === 8 && value.trim().length === 0) {
+      if (tags.size > 0 && tagsIndex === -1) {
         removeTags(Array.from(tags)[tags.size - 1])
+        hideTagsIndex()
+      } else if (tags.size > 0) {
+        removeTags(Array.from(tags)[tagsIndex])
+        if (tagsIndex === tags.size - 1)
+          hideTagsIndex()
       }
     }
   }
@@ -174,17 +224,17 @@ export default ({ name, onChange, suggestions, placeholder = "", hasTags = false
     <div onKeyDown={key}>
       <Autocomplete id={id}>
         {Array.from(tags).map((tag, index) =>
-          (<Tag style={index !== completionIndex ? {} : { background: theme.color.dark }} key={index}>{tag}</Tag>))
+          (<Tag className={"tag"} onClick={(e) => clickTag(e, index)} style={index !== tagsIndex ? {} : { background: theme.color.dark }} key={index}>{tag}</Tag>))
         }
-        <Input type="text" placeholder={placeholder} name={name} value={value} onChange={change} autoComplete="off"/>
+        <Input id={idInput} type="text" placeholder={placeholder} name={name} value={value} onChange={change} autoComplete="off"/>
       </Autocomplete>
       {
         completions.length > 0
           ?
           <AutocompleteItems style={{ width: sizeOfInput() }}>
             {completions.map((val, index) =>
-              (<AutocompleteItem style={index !== completionIndex ? {} : { background: theme.color.grey }}
-                                 onClick={(_) => select(val)} key={index}>{val}</AutocompleteItem>))
+              (<AutocompleteItem className={"autocomplete-item"} style={index !== completionIndex ? {} : { background: theme.color.grey }}
+                                 onClick={(e) => clickCompletion(e, val)} key={index}>{val}</AutocompleteItem>))
             }
           </AutocompleteItems>
           : <></>

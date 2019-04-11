@@ -3,7 +3,7 @@ import { Header } from "../Layout"
 import { Button, Form, FormGroup, FormSection, Input, Select } from "../Form"
 import { Col, Container, Row } from "../Responsive"
 import { useForm } from "../../hooks"
-import AutocompleteInput from "../Form/AutocompleteInput";
+import TagsInput from "../Form/TagsInput";
 
 const test = () => new Promise((resolve, reject) => setTimeout(resolve, 4000))
 
@@ -37,7 +37,8 @@ export default () => {
 
             <FormGroup name="Tags"
                        description="This is how others will learn about the project, so make it good!">
-              <AutocompleteInput hasTags={true} name="tags" placeholder={"Type tags here"} suggestions={["hello", "world", "hello world", "hai!"]} onChange={handleChange}/>
+              <TagsInput name="tags" placeholder={"Type tags here"}
+                                 suggestions={["hello", "world", "hello world", "hai!"]} onChange={(a) => console.log(a)}/>
             </FormGroup>
           </FormSection>
 

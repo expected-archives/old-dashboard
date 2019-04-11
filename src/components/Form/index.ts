@@ -1,5 +1,5 @@
 import { Input, Select } from "./Input"
-import AutocompleteInput from "./AutocompleteInput"
+import AutocompleteInput from "./TagsInput"
 import { Button, ButtonLink } from "./Button"
 
 export { default as Form } from "./Form"

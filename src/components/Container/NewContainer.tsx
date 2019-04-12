@@ -8,7 +8,7 @@ import TagsInput from "../Form/TagsInput";
 const test = () => new Promise((resolve, reject) => setTimeout(resolve, 4000))
 
 export default () => {
-  const { loading, error,   handleChange, handleSubmit, dispatch, values } = useForm({
+  const { loading, error, handleChange, handleSubmit, dispatch, values } = useForm({
     name: "",
     image: "",
     size: "",
@@ -37,8 +37,8 @@ export default () => {
 
             <FormGroup name="Tags"
                        description="This is how others will learn about the project, so make it good!">
-              <TagsInput name="tags" placeholder={"Type tags here"}
-                                 suggestions={["hello", "world", "hello world", "hai!"]} onChange={(a) => console.log(a)}/>
+              <TagsInput name="tags" placeholder={"type tags here"}
+                         suggestions={["hello", "world", "hello world", "hai!"]} onChange={(a) => console.log(a)}/>
             </FormGroup>
           </FormSection>
 

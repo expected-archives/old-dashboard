@@ -109,10 +109,13 @@ export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [
   useEffect(() => {
     const focusOut = (event: any) => {
       hideCompletion()
+      if (event.type === "click" && event.path[0].id.includes(idInput)) {
+        hideTagsIndex()
+      }
       if (event.type === "resize" ||
         (!event.path[0].className.includes("tag") &&
-        !event.path[0].id.includes(idInput) &&
-        !event.path[0].className.includes("autocomplete-item"))) {
+          !event.path[0].id.includes(idInput) &&
+          !event.path[0].className.includes("autocomplete-item"))) {
         setFocused(false)
         hideTagsIndex()
         if (value.trim().length !== 0) {
@@ -182,7 +185,7 @@ export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [
     if (input) return input.focus()
   }
 
-  const addTags = (val: string) => updateTags(new Set(Array.from(tags).concat([val])))
+  const addTags = (val: string) => updateTags(new Set(Array.from(tags).concat([val.trim()])))
   const removeTags = (val: string) => updateTags(new Set(Array.from(tags).filter(e => e !== val)))
 
   const key = (e: any) => {
@@ -201,11 +204,11 @@ export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [
       if (e.keyCode === 9 && tagsIndex !== -1) {
         e.preventDefault()
         tagsRight()
-      } else {
+      } else if (e.keyCode === 9) {
+        select(value)
         setFocused(false)
       }
-    }
-    else if (e.keyCode === 40) completionDown()
+    } else if (e.keyCode === 40) completionDown()
     else if (e.keyCode === 38) completionUp()
     else if (e.keyCode === 37 && value.trim().length === 0) tagsLeft()
     else if ((e.keyCode === 39) && value.trim().length === 0) tagsRight()
@@ -233,7 +236,8 @@ export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [
 
   return (
     <div onKeyDown={key}>
-      <Autocomplete id={id} style={isFocused ? {borderColor: theme.color.blue} : {}} onFocus={(_) => setFocused(true)}>
+      <Autocomplete id={id} style={isFocused ? { borderColor: theme.color.blue } : {}}
+                    onFocus={(_) => setFocused(true)}>
         {Array.from(tags).map((tag, index) =>
           (<Tag className={"tag"} onClick={(e) => clickTag(e, index)}
                 style={index !== tagsIndex ? {} : { background: theme.color.dark }} key={index}>{tag}</Tag>))
@@ -248,7 +252,8 @@ export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [
             {completions.map((val, index) =>
               (<AutocompleteItem className={"autocomplete-item"}
                                  style={index !== completionIndex ? {} : { background: theme.color.grey }}
-                                 onClick={(e) => clickCompletion(e, val)} key={index}>{suggestionRender(val)}</AutocompleteItem>))
+                                 onClick={(e) => clickCompletion(e, val)}
+                                 key={index}>{suggestionRender(val)}</AutocompleteItem>))
             }
           </AutocompleteItems>
           : <></>

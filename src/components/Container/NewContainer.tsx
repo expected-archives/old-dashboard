@@ -1,9 +1,8 @@
 import React from "react"
 import { Header } from "../Layout"
-import { Button, Form, FormGroup, FormSection, Input, Select } from "../Form"
+import { AutocompleteInput, TagsInput, Button, Form, FormGroup, FormSection, Input, Select } from "../Form"
 import { Col, Container, Row } from "../Responsive"
 import { useForm } from "../../hooks"
-import TagsInput from "../Form/TagsInput";
 
 const test = () => new Promise((resolve, reject) => setTimeout(resolve, 4000))
 
@@ -31,8 +30,13 @@ export default () => {
             </FormGroup>
 
             <FormGroup name="Image">
-              <Input type="text" placeholder="nginx:latest" name="image"
-                     onChange={handleChange} autoComplete="off"/>
+              <AutocompleteInput placeholder="nginx:latest" name="image"
+                                 suggestions={[
+                                   "hello", "world",
+                                   "hello world", "hai!",
+                                   "Super", "Supra!", "Sjikl",
+                                 ]}
+                                 onChange={(a) => console.log("image:", a.target.value)} />
             </FormGroup>
 
             <FormGroup name="Tags"

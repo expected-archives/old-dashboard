@@ -43,7 +43,6 @@ export default ({ name, onChange, suggestions, placeholder = "", suggestionRende
   const [completionIndex, setCompletionIndex] = useState(-1)
 
   const [id] = useState('_' + Math.random().toString(36).substr(2, 9))
-  const [idInput] = useState('_' + Math.random().toString(36).substr(2, 9))
 
   useEffect(() => {
     const focusOut = (event: any) => {
@@ -91,7 +90,7 @@ export default ({ name, onChange, suggestions, placeholder = "", suggestionRende
   }
 
   const focusInput = () => {
-    const input = document.getElementById(idInput)
+    const input = document.getElementById(id)
     if (input) return input.focus()
   }
 

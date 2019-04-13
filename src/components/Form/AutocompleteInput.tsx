@@ -1,6 +1,6 @@
 import { styled, theme } from "../../style"
-import React, { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from "react";
-import { Input } from "./index";
+import React, { ChangeEvent, ReactNode, useEffect, useState } from "react"
+import { Input } from "./index"
 
 const AutocompleteInput = styled(Input)``
 

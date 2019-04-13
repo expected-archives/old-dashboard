@@ -1,5 +1,5 @@
 import { styled, theme } from "../../style"
-import React, { ChangeEvent, ReactNode, useEffect, useState } from "react";
+import React, { ChangeEvent, ReactNode, useEffect, useState } from "react"
 
 const Input = styled.input`
   width: auto;
@@ -57,7 +57,7 @@ const Autocomplete = styled.div`
   }
 `
 
-const AutocompleteItems = styled.div`
+const Suggestions = styled.div`
   margin-top: 10px;
   border-radius: 0.25rem;
   position: absolute;
@@ -71,8 +71,9 @@ const AutocompleteItem = styled.div`
   cursor: pointer;
   background: white;
   padding: 0.3rem 0.8rem 0.3rem 0.8rem;
+  
   :hover{
-    background: ${theme.color.grey};
+    background: ${theme.color.greyLight};
   }
 `
 
@@ -95,8 +96,8 @@ export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [
   const [value, setValue] = useState("")
   const [completionIndex, setCompletionIndex] = useState(-1)
   const [isFocused, setFocused] = useState(false)
-  const [id] = useState('_' + Math.random().toString(36).substr(2, 9))
-  const [idInput] = useState('_' + Math.random().toString(36).substr(2, 9))
+  const [id] = useState("_" + Math.random().toString(36).substr(2, 9))
+  const [idInput] = useState("_" + Math.random().toString(36).substr(2, 9))
 
   const [tags, setTags] = useState<Set<string>>(new Set(defaultTags))
   const [tagsIndex, setTagsIndex] = useState(-1)
@@ -231,7 +232,7 @@ export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [
   const sizeOfInput = () => {
     const d = document.getElementById(id)
     if (d) return d.offsetWidth + "px"
-    else return '100%'
+    else return "100%"
   }
 
   return (
@@ -245,19 +246,16 @@ export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [
         <Input id={idInput} type="text" placeholder={placeholder} name={name} value={value} onChange={change}
                autoComplete="off"/>
       </Autocomplete>
-      {
-        completions.length > 0
-          ?
-          <AutocompleteItems style={{ width: sizeOfInput() }}>
-            {completions.map((val, index) =>
-              (<AutocompleteItem className={"autocomplete-item"}
-                                 style={index !== completionIndex ? {} : { background: theme.color.grey }}
-                                 onClick={(e) => clickCompletion(e, val)}
-                                 key={index}>{suggestionRender(val)}</AutocompleteItem>))
-            }
-          </AutocompleteItems>
-          : <></>
-      }
+      {completions.length > 0 && (
+        <Suggestions style={{ width: sizeOfInput() }}>
+          {completions.map((val, index) =>
+            (<AutocompleteItem className={"autocomplete-item"}
+                               style={index !== completionIndex ? {} : { background: theme.color.grey }}
+                               onClick={(e) => clickCompletion(e, val)}
+                               key={index}>{suggestionRender(val)}</AutocompleteItem>))
+          }
+        </Suggestions>
+      )}
     </div>
   )
 }

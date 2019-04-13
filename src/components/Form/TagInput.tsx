@@ -1,5 +1,5 @@
 import { styled, theme } from "../../style"
-import React, { ChangeEvent, ReactNode, useEffect, useState } from "react"
+import React, { KeyboardEvent, ReactNode, useReducer, useState } from "react"
 
 const Input = styled.input`
   width: auto;
@@ -13,10 +13,7 @@ const Input = styled.input`
   font-weight: 400;
   line-height: 1.5;
   background-clip: padding-box;
-  &:focus {
-    outline: none;
-    box-shadow: none;
-  }
+  
   &:disabled, &[readonly] {
      background: ${props => props.theme.color.grey};
   }
@@ -57,7 +54,7 @@ const Autocomplete = styled.div`
   }
 `
 
-const Suggestions = styled.div`
+const SuggestionList = styled.div`
   margin-top: 10px;
   border-radius: 0.25rem;
   position: absolute;
@@ -67,7 +64,7 @@ const Suggestions = styled.div`
   width: 100%;
 `
 
-const AutocompleteItem = styled.div`
+const Suggestion = styled.div`
   cursor: pointer;
   background: white;
   padding: 0.3rem 0.8rem 0.3rem 0.8rem;
@@ -80,183 +77,139 @@ const AutocompleteItem = styled.div`
 interface IProps {
   suggestions: string[]
   onChange: (event: string[]) => void
-  name: string,
-  placeholder?: string,
-  defaultTags?: string[],
+  name: string
+  placeholder?: string
+  defaultTags?: string[]
   suggestionRender?: (suggest: string) => ReactNode
 }
 
-const defaultSuggestionRender = (suggest: string) => {
-  return <>{suggest}</>
+interface IState {
+  value: string
+  tags: string[]
+  suggestions: string[]
+  currentSuggestions: string[]
+  suggestionOffset: number
+  suggestionIndex: number
+  tagIndex: number
 }
 
-export default ({ name, onChange, suggestions, placeholder = "", defaultTags = [], suggestionRender = defaultSuggestionRender }: IProps) => {
+type Action =
+  { action: "SET_VALUE", value: string } |
+  { action: "ADD_TAG", value: string } |
+  { action: "DELETE_TAG", value: string } |
+  { action: "SET_TAG_INDEX", value: number } |
+  { action: "SET_SUGGESTION_INDEX", value: number }
 
-  const [completions, setCompletions] = useState<string[]>([])
-  const [value, setValue] = useState("")
-  const [completionIndex, setCompletionIndex] = useState(-1)
-  const [isFocused, setFocused] = useState(false)
-  const [id] = useState("_" + Math.random().toString(36).substr(2, 9))
-  const [idInput] = useState("_" + Math.random().toString(36).substr(2, 9))
-
-  const [tags, setTags] = useState<Set<string>>(new Set(defaultTags))
-  const [tagsIndex, setTagsIndex] = useState(-1)
-
-  const updateTags = (list: Set<string>) => {
-    onChange(Array.from(list))
-    setTags(list)
+const reducer = (state: IState, action: Action) => {
+  switch (action.action) {
+    case "SET_VALUE":
+      return {
+        ...state,
+        value: action.value,
+        currentSuggestions: action.value.trim() ?
+          state.suggestions.filter(s => s.startsWith(action.value)) : [],
+        tagIndex: -1,
+        suggestionIndex: -1,
+      }
+    case "ADD_TAG":
+      return {
+        ...state,
+        value: "",
+        tags: state.tags.includes(action.value) || !action.value.trim() ?
+          state.tags : [...state.tags, action.value],
+        tagIndex: -1,
+        suggestionIndex: -1,
+      }
+    case "DELETE_TAG":
+      return {
+        ...state,
+        tags: state.tags.filter(tag => tag !== action.value),
+        tagIndex: -1,
+        suggestionIndex: -1,
+      }
+    case "SET_TAG_INDEX":
+      return {
+        ...state,
+        tagIndex: action.value < 0 || action.value >= state.tags.length ?
+          (action.value < 0 ? state.tags.length - 1 : 0) : action.value,
+      }
+    case "SET_SUGGESTION_INDEX":
+      return {
+        ...state,
+        suggestionIndex: action.value < 0 || action.value >= state.currentSuggestions.length ?
+          (action.value < 0 ? state.tags.length - 1 : 0) : action.value,
+      }
   }
+  return state
+}
 
-  useEffect(() => {
-    const focusOut = (event: any) => {
-      hideCompletion()
-      if (event.type === "click" && event.path[0].id.includes(idInput)) {
-        hideTagsIndex()
-      }
-      if (event.type === "resize" ||
-        (!event.path[0].className.includes("tag") &&
-          !event.path[0].id.includes(idInput) &&
-          !event.path[0].className.includes("autocomplete-item"))) {
-        setFocused(false)
-        hideTagsIndex()
-        if (value.trim().length !== 0) {
-          addTags(value)
-          clean()
-        }
-      } else {
-        event.preventDefault()
-      }
-    }
-    document.addEventListener("click", focusOut)
-    window.addEventListener("resize", focusOut)
-    return () => {
-      document.removeEventListener("click", focusOut)
-      window.removeEventListener("resize", focusOut)
-    }
+export default ({ suggestions, placeholder = "", defaultTags = [] }: IProps) => {
+  const [state, dispatch] = useReducer(reducer, {
+    value: "",
+    tags: defaultTags,
+    suggestions,
+    currentSuggestions: [],
+    suggestionOffset: 0,
+    suggestionIndex: -1,
+    tagIndex: -1,
   })
 
+  const [isFocused, setFocused] = useState(false)
+  const [id] = useState("_" + Math.random().toString(36).substr(2, 9))
 
-  const change = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    hideTagsIndex()
-    setValue(e.target.value)
-    setCompletions(suggestions
-      .filter(x => e.target.value.length > 0 && x.startsWith(e.target.value))
-      .slice(0, 5))
-  }
 
-  const clean = () => {
-    setValue("")
-  }
-
-  const select = (val: string) => {
-    if (val.trim().length !== 0) {
-      addTags(val)
-      clean()
+  const handleInputKey = (event: KeyboardEvent<HTMLDivElement>) => {
+    if ([32, 13, 186, 188].includes(event.keyCode)) { // space, enter, semi, comma key
+      event.preventDefault()
+      dispatch({
+        action: "ADD_TAG",
+        value: state.value,
+      })
+    } else if ([37, 39].includes(event.keyCode)) { // left, right arrow key
+      event.preventDefault()
+      dispatch({
+        action: "SET_TAG_INDEX",
+        value: event.keyCode === 37 ? state.tagIndex - 1 : state.tagIndex + 1,
+      })
+    } else if ([38, 40].includes(event.keyCode)) { // up, down arrow key
+      event.preventDefault()
+      dispatch({
+        action: "SET_SUGGESTION_INDEX",
+        value: event.keyCode === 38 ? state.suggestionIndex - 1 : state.suggestionIndex + 1,
+      })
+    } else if (event.keyCode === 8 && (state.tagIndex !== -1 || !state.value.trim())) { // del key
+      event.preventDefault()
+      dispatch({
+        action: "DELETE_TAG",
+        value: state.tags[state.tagIndex !== -1 ? state.tagIndex : state.tags.length - 1],
+      })
     }
-    hideCompletion()
-  }
-
-  const hideCompletion = () => {
-    setCompletionIndex(-1)
-    setCompletions([])
-  }
-
-  const hideTagsIndex = () => setTagsIndex(-1)
-
-  const clickTag = (e: any, tagIndex: number) => {
-    e.preventDefault()
-    setTagsIndex(tagIndex)
-    if (value.trim().length !== 0) {
-      addTags(value)
-      clean()
-    }
-    focusInput()
-  }
-
-  const clickCompletion = (e: any, completion: string) => {
-    e.preventDefault()
-    addTags(completion)
-    clean()
-    hideCompletion()
-    focusInput()
-  }
-
-  const focusInput = () => {
-    const input = document.getElementById(idInput)
-    if (input) return input.focus()
-  }
-
-  const addTags = (val: string) => updateTags(new Set(Array.from(tags).concat([val.trim()])))
-  const removeTags = (val: string) => updateTags(new Set(Array.from(tags).filter(e => e !== val)))
-
-  const key = (e: any) => {
-
-    const completionDown = () => setCompletionIndex(completionIndex + 1 > completions.length - 1 ? 0 : completionIndex + 1)
-    const completionUp = () => setCompletionIndex(completionIndex - 1 < 0 ? completions.length - 1 : completionIndex - 1)
-
-    const tagsRight = () => setTagsIndex(tagsIndex + 1 > tags.size - 1 ? 0 : tagsIndex + 1)
-    const tagsLeft = () => setTagsIndex(tagsIndex - 1 < 0 ? tags.size - 1 : tagsIndex - 1)
-
-    if (e.keyCode === 13) e.preventDefault()
-
-    if (e.keyCode === 27 || e.keyCode === 9) {
-      hideCompletion()
-      if (e.keyCode !== 9) hideTagsIndex()
-      if (e.keyCode === 9 && tagsIndex !== -1) {
-        e.preventDefault()
-        tagsRight()
-      } else if (e.keyCode === 9) {
-        select(value)
-        setFocused(false)
-      }
-    } else if (e.keyCode === 40) completionDown()
-    else if (e.keyCode === 38) completionUp()
-    else if (e.keyCode === 37 && value.trim().length === 0) tagsLeft()
-    else if ((e.keyCode === 39) && value.trim().length === 0) tagsRight()
-    else if (e.keyCode === 13 && completionIndex !== -1) select(completions[completionIndex])
-    else if (e.keyCode === 13 && value.trim().length > 0 && completionIndex === -1) {
-      select(value)
-      clean()
-    } else if (e.keyCode === 8 && value.trim().length === 0) {
-      if (tags.size > 0 && tagsIndex === -1) {
-        removeTags(Array.from(tags)[tags.size - 1])
-        hideTagsIndex()
-      } else if (tags.size > 0) {
-        removeTags(Array.from(tags)[tagsIndex])
-        if (tagsIndex === tags.size - 1)
-          hideTagsIndex()
-      }
-    }
-  }
-
-  const sizeOfInput = () => {
-    const d = document.getElementById(id)
-    if (d) return d.offsetWidth + "px"
-    else return "100%"
   }
 
   return (
-    <div onKeyDown={key}>
-      <Autocomplete id={id} style={isFocused ? { borderColor: theme.color.blue } : {}}
-                    onFocus={(_) => setFocused(true)}>
-        {Array.from(tags).map((tag, index) =>
-          (<Tag className={"tag"} onClick={(e) => clickTag(e, index)}
-                style={index !== tagsIndex ? {} : { background: theme.color.dark }} key={index}>{tag}</Tag>))
-        }
-        <Input id={idInput} type="text" placeholder={placeholder} name={name} value={value} onChange={change}
-               autoComplete="off"/>
+    <>
+      <Autocomplete>
+        {state.tags.map((tag, index) => (
+          <Tag onClick={() => dispatch({ action: "DELETE_TAG", value: tag })}
+               style={index !== state.tagIndex ? {} : { background: theme.color.dark }} key={index}>
+            {tag}
+          </Tag>
+        ))}
+        <Input type="text" placeholder={placeholder} value={state.value} autoComplete="off" onKeyDown={handleInputKey}
+               onChange={(e) => dispatch({ action: "SET_VALUE", value: e.target.value })}/>
       </Autocomplete>
-      {completions.length > 0 && (
-        <Suggestions style={{ width: sizeOfInput() }}>
-          {completions.map((val, index) =>
-            (<AutocompleteItem className={"autocomplete-item"}
-                               style={index !== completionIndex ? {} : { background: theme.color.grey }}
-                               onClick={(e) => clickCompletion(e, val)}
-                               key={index}>{suggestionRender(val)}</AutocompleteItem>))
-          }
-        </Suggestions>
+      {state.currentSuggestions.length > 0 && (
+        <SuggestionList>
+          {state.currentSuggestions.map((value, index) => (
+            <Suggestion className={"autocomplete-item"}
+                        style={index === state.suggestionIndex ? { background: theme.color.greyLight } : {}}
+                        onClick={() => dispatch({ action: "ADD_TAG", value })}
+                        key={index}>
+              {value}
+            </Suggestion>
+          ))}
+        </SuggestionList>
       )}
-    </div>
+    </>
   )
 }
-

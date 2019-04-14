@@ -1,6 +1,6 @@
 import React from "react"
 import { Header } from "../Layout"
-import { AutocompleteInput, TagInput, Button, Form, FormGroup, FormSection, Input, Select } from "../Form"
+import { AutocompleteInput, Button, Form, FormGroup, FormSection, Input, Select, TagInput } from "../Form"
 import { Col, Container, Row } from "../Responsive"
 import { useForm } from "../../hooks"
 
@@ -24,7 +24,7 @@ export default () => {
         <Form onSubmit={handleSubmit} loading={loading}>
           <FormSection name="Basic"
                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
-            <FormGroup name="Name">
+            <FormGroup name="Name" error="Invalid container name!">
               <Input type="text" placeholder="my-container" name="name"
                      onChange={handleChange} autoComplete="off"/>
             </FormGroup>
@@ -36,13 +36,14 @@ export default () => {
                                    "hello world", "hai!",
                                    "Super", "Supra!", "Sjikl",
                                  ]}
-                                 onChange={(a) => console.log("image:", a.target.value)} />
+                                 onChange={(a) => console.log("image:", a.target.value)}/>
             </FormGroup>
 
             <FormGroup name="Tags"
                        description="This is how others will learn about the project, so make it good!">
-              <TagInput name="tags" placeholder={"type tags here"}
-                        suggestions={["hello", "world", "hello world", "hai!"]} onChange={(a) => console.log("tags:", a)}/>
+              <TagInput placeholder={"type tags here"}
+                        suggestions={["hello", "world", "hello world", "hai!"]}
+                        onChange={(a) => console.log("tags:", a)}/>
             </FormGroup>
           </FormSection>
 

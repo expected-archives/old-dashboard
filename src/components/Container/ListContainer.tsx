@@ -54,8 +54,8 @@ const columns = [
     key: "tags",
     render: (tags: any) => (
       <>
-        {tags.map((tag: string, index: number) => (
-          <Tag key={index}>{tag}</Tag>
+        {tags.map((tag: any, i: number) => (
+          <Tag key={i}>{tag}</Tag>
         ))}
       </>
     ),

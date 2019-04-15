@@ -1,14 +1,16 @@
 import React, { ReactNode } from "react"
 import { styled } from "../../style"
 
-interface IProps {
-  name?: string
-  description?: string
-  children: ReactNode
+interface IFormGroupProps {
+  error?: boolean
 }
 
-const FormGroup = styled.div`
+const FormGroup = styled.div<IFormGroupProps>`
   margin-bottom: 1rem;
+  
+  input, input:focus {
+    border-color: ${props => props.error ? props.theme.color.red : ""};
+  }
 `
 
 const Label = styled.label`
@@ -26,8 +28,22 @@ const Description = styled.small`
   font-weight: 400;
 `
 
-export default ({ name, description, children }: IProps) => (
-  <FormGroup>
+const Error = styled.div`
+  width: 100%;
+  margin-top: .25rem;
+  font-size: 80%;
+  color: ${props => props.theme.color.red};
+`
+
+interface IProps {
+  name?: string
+  description?: string
+  error?: string
+  children: ReactNode
+}
+
+export default ({ name, description, error, children }: IProps) => (
+  <FormGroup error={error !== undefined}>
     {name && (
       <Label>
         {name}
@@ -39,5 +55,10 @@ export default ({ name, description, children }: IProps) => (
       </Description>
     )}
     {children}
+    {error && (
+      <Error>
+        {error}
+      </Error>
+    )}
   </FormGroup>
 )

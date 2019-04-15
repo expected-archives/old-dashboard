@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { getAccount, regenerateApiKey, syncAccount } from "../../client"
 import { Header } from "../Layout"
-import { FormGroup, FormSection, Input } from "../Form"
+import { Button, FormGroup, FormSection, Input } from "../Form"
 import { usePromise } from "../../hooks"
-import { Container } from "../Responsive"
+import { Col, Container, Row } from "../Responsive"
 import { Loader } from "../Loader"
 
 export default () => {
@@ -34,7 +34,7 @@ export default () => {
         setApiError(error)
       })
   }
-
+// form-row form-group
   return (
     <>
       <Header title="Account" preTitle="Overview"/>
@@ -57,27 +57,29 @@ export default () => {
             <FormGroup name="Name">
               <Input type="text" className="form-control" name="name" value={data ? data.name : ""} disabled/>
             </FormGroup>
-            <button className="btn btn-outline-primary" onClick={syncAccountHandler}>
+            <Button color="blue" outline onClick={syncAccountHandler}>
               Sync with GitHub
-            </button>
+            </Button>
           </FormSection>
           <FormSection name="API Key">
-            <div className="form-row form-group">
-              <div className="col-10">
-                <Input type={reveal ? "text" : "password"} className="form-control" name="name"
-                       value={data ? data.apiKey : ""}
-                       disabled/>
-              </div>
-              <div className="col">
-                <button className="btn btn-outline-primary form-control" onClick={() => setReveal(!reveal)}>
+            <Row>
+              <Col>
+                <FormGroup>
+                  <Input type={reveal ? "text" : "password"} className="form-control" name="name"
+                         value={data ? data.apiKey : ""}
+                         disabled/>
+                </FormGroup>
+              </Col>
+              <Col extraSmall={"auto"}>
+                <Button color="blue" outline onClick={() => setReveal(!reveal)}>
                   Reveal
-                </button>
-              </div>
-            </div>
+                </Button>
+              </Col>
+            </Row>
             <FormGroup>
-              <button className="btn btn-success" onClick={regenerateApiKeyHandler}>
+              <Button color="green" onClick={regenerateApiKeyHandler}>
                 Regenerate API Key
-              </button>
+              </Button>
             </FormGroup>
           </FormSection>
         </Loader>

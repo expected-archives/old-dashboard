@@ -1,19 +1,38 @@
 import React from "react"
 import { Header } from "../Layout"
-import { Button, Form, FormGroup, FormSection, Input, Select } from "../Form"
+import { AutocompleteInput, Button, Form, FormGroup, FormSection, Input, Select, TagInput } from "../Form"
 import { Col, Container, Row } from "../Responsive"
-import { useForm } from "../../hooks"
+import { useForm, usePromise } from "../../hooks"
+import { getContainerPlans } from "../../client"
+import { styled } from "../../style"
 
 const test = () => new Promise((resolve, reject) => setTimeout(resolve, 4000))
 
+const PlanTable = styled.table`
+  width: 100%;
+`
+
+const Plan = styled.tr`
+  border: 1px solid ${props => props.theme.color.grey};
+  border-radius: 0.25rem;
+  
+  td {
+    padding: 0.5rem 1rem;
+  }
+`
+
 export default () => {
+  const { data, loading: load } = usePromise(() => Promise.all([
+    getContainerPlans(),
+  ]), [])
+
   const { loading, error, handleChange, handleSubmit, dispatch, values } = useForm({
     name: "",
     image: "",
     size: "",
     tags: "",
   }, async (values) => {
-    await test()
+    // await test()
   })
 
   return (
@@ -21,7 +40,7 @@ export default () => {
       <Header preTitle="Containers" title="Create a new container"/>
 
       <Container>
-        <Form onSubmit={handleSubmit} loading={loading}>
+        <Form onSubmit={handleSubmit} loading={loading && load}>
           <FormSection name="Basic"
                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
             <FormGroup name="Name">
@@ -30,26 +49,37 @@ export default () => {
             </FormGroup>
 
             <FormGroup name="Image">
-              <Input type="text" placeholder="nginx:latest" name="image"
-                     onChange={handleChange} autoComplete="off"/>
+              <AutocompleteInput placeholder="nginx:latest" name="image"
+                                 suggestions={[
+                                   "hello", "world",
+                                   "hello world", "hai!",
+                                   "Super", "Supra!", "Sjikl",
+                                 ]}
+                                 onChange={(a) => console.log("image:", a.target.value)}/>
             </FormGroup>
 
             <FormGroup name="Tags"
                        description="This is how others will learn about the project, so make it good!">
-              <Input type="text" name="tags"
-                     onChange={handleChange} autoComplete="off"/>
+              <TagInput placeholder={"type tags here"}
+                        suggestions={["hello", "world", "hello world", "hai!"]}
+                        onChange={(a) => console.log("tags:", a)}/>
             </FormGroup>
           </FormSection>
 
           <FormSection name="Choose a plan"
                        description=" do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
-            <FormGroup name="Select a size">
-              <Select name="size" onChange={handleChange}>
-                <option value="64">64mb</option>
-                <option value="128">128mb</option>
-                <option value="256">256mb</option>
-              </Select>
-            </FormGroup>
+            <PlanTable>
+              <tbody>
+                {data && data[0].map((plan, index) => (
+                  <Plan key={index}>
+                    <td>{plan.name}</td>
+                    <td>{plan.cpu} vCPU</td>
+                    <td>{plan.memory}MB</td>
+                    <td>${plan.price}</td>
+                  </Plan>
+                ))}
+              </tbody>
+            </PlanTable>
           </FormSection>
 
           <Row justifyContent="flex-end">

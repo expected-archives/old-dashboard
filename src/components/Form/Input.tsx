@@ -1,16 +1,14 @@
 import { styled } from "../../style"
 
-
 export const Input = styled.input`
   display: block;
   width: 100%;
-  height: calc(1.5em + 0.75rem + 2px);
-  padding: 0.375rem 0.75rem;
+  padding: 0.575rem 0.75rem;
   font-size: .9375rem;
   font-weight: 400;
   line-height: 1.5;
   color: ${props => props.theme.text.normal};
-  background-color: #fff;
+  background: ${props => props.theme.color.light};
   background-clip: padding-box;
   border: 1px solid ${props => props.theme.color.grey};
   border-radius: 0.25rem;
@@ -27,4 +25,6 @@ export const Input = styled.input`
   }
 `
 
-export const Select = Input.withComponent("select")
+export const Select = styled(Input.withComponent("select"))`
+  height: 2.656rem;
+`

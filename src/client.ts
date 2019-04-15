@@ -11,7 +11,7 @@ export interface IAccount {
 }
 
 export interface IContainer {
-  key: string
+  id: string
   name: string
   status: string
   image: string
@@ -19,6 +19,15 @@ export interface IContainer {
   memory: number
   tags: string[]
   createdAt: Date
+}
+
+export interface IContainerPlan {
+  id: string
+  name: string
+  price: number
+  cpu: number
+  memory: number
+  available: boolean
 }
 
 export interface CreateContainerRequest {
@@ -101,4 +110,13 @@ export const createContainer = (req: CreateContainerRequest): Promise<IContainer
         throw new Error(res.data.message)
       }
       return toContainer(res.data.container)
+    })
+
+export const getContainerPlans = (): Promise<IContainerPlan[]> =>
+  client.get("/v1/containers/plans")
+    .then((res) => {
+      if (res.status !== 200) {
+        throw new Error(res.data.message)
+      }
+      return res.data.plans
     })

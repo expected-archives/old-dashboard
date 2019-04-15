@@ -2,18 +2,37 @@ import React from "react"
 import { Header } from "../Layout"
 import { AutocompleteInput, Button, Form, FormGroup, FormSection, Input, Select, TagInput } from "../Form"
 import { Col, Container, Row } from "../Responsive"
-import { useForm } from "../../hooks"
+import { useForm, usePromise } from "../../hooks"
+import { getContainerPlans } from "../../client"
+import { styled } from "../../style"
 
 const test = () => new Promise((resolve, reject) => setTimeout(resolve, 4000))
 
+const PlanTable = styled.table`
+  width: 100%;
+`
+
+const Plan = styled.tr`
+  border: 1px solid ${props => props.theme.color.grey};
+  border-radius: 0.25rem;
+  
+  td {
+    padding: 0.5rem 1rem;
+  }
+`
+
 export default () => {
+  const { data, loading: load } = usePromise(() => Promise.all([
+    getContainerPlans(),
+  ]), [])
+
   const { loading, error, handleChange, handleSubmit, dispatch, values } = useForm({
     name: "",
     image: "",
     size: "",
     tags: "",
   }, async (values) => {
-    await test()
+    // await test()
   })
 
   return (
@@ -21,10 +40,10 @@ export default () => {
       <Header preTitle="Containers" title="Create a new container"/>
 
       <Container>
-        <Form onSubmit={handleSubmit} loading={loading}>
+        <Form onSubmit={handleSubmit} loading={loading && load}>
           <FormSection name="Basic"
                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
-            <FormGroup name="Name" error="Invalid container name!">
+            <FormGroup name="Name">
               <Input type="text" placeholder="my-container" name="name"
                      onChange={handleChange} autoComplete="off"/>
             </FormGroup>
@@ -49,13 +68,18 @@ export default () => {
 
           <FormSection name="Choose a plan"
                        description=" do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
-            <FormGroup name="Select a size">
-              <Select name="size" onChange={handleChange}>
-                <option value="64">64mb</option>
-                <option value="128">128mb</option>
-                <option value="256">256mb</option>
-              </Select>
-            </FormGroup>
+            <PlanTable>
+              <tbody>
+                {data && data[0].map((plan, index) => (
+                  <Plan key={index}>
+                    <td>{plan.name}</td>
+                    <td>{plan.cpu} vCPU</td>
+                    <td>{plan.memory}MB</td>
+                    <td>${plan.price}</td>
+                  </Plan>
+                ))}
+              </tbody>
+            </PlanTable>
           </FormSection>
 
           <Row justifyContent="flex-end">

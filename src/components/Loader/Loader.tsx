@@ -9,7 +9,7 @@ interface IProps {
 
 const Loader = styled.div`
   position: absolute;
-  top: 50%;
+  top: calc(50% - 80px);
   left: 50%;
   z-index: 10000;
   height: 5em;
@@ -59,7 +59,7 @@ const Spinner = styled.div`
 
 export default ({ loading = true, children }: IProps) => {
   return (
-    <div style={loading ? { userSelect: "none", pointerEvents: "none", overflow: "hidden" } : {}}>
+    <div style={loading ? { userSelect: "none", pointerEvents: "none", overflow: "hidden", position: "relative" } : {}}>
       {loading && (
         <Loader>
           <Spinner/>

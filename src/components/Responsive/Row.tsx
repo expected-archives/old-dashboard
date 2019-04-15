@@ -12,4 +12,5 @@ export default styled.div<IProps>(props => css`
   flex-wrap: wrap;
   align-content: ${props.alignContent || "inherit"};
   justify-content: ${props.justifyContent || "inherit"};
+  margin: 0 -15px;
 `)

@@ -1,5 +1,5 @@
 import { styled, theme } from "../../style"
-import React, { KeyboardEvent, useReducer, useState } from "react"
+import React, { KeyboardEvent, useEffect, useReducer, useState } from "react"
 
 const Input = styled.input`
   width: auto;
@@ -155,9 +155,12 @@ export default ({ onChange, suggestions, placeholder = "", value = [] }: IProps)
   })
   const [focus, setFocus] = useState(false)
 
-  if (onChange && state.tags.length) {
-    onChange(state.tags)
-  }
+
+  useEffect(() => {
+    if (onChange && state.tags.length) {
+      onChange(state.tags)
+    }
+  }, [state.tags])
 
   const handleInputKey = (event: KeyboardEvent<HTMLDivElement>) => {
     if ([" ", "Enter", ";", ","].includes(event.key)) {
@@ -188,7 +191,7 @@ export default ({ onChange, suggestions, placeholder = "", value = [] }: IProps)
   }
 
   return (
-    <TagInput onFocus={() => setFocus(true)} onBlur={() => setFocus(true)}>
+    <TagInput onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}>
       <Autocomplete focus={focus}>
         {state.tags.map((tag, index) => (
           <Tag key={index} onClick={() => dispatch({ action: "DELETE_TAG", value: tag })}

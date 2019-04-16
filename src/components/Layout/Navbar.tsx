@@ -2,6 +2,7 @@ import React from "react"
 import { Link, Route } from "react-router-dom"
 import { styled } from "../../style"
 import { Container } from "../Responsive"
+import { useMappedState } from "redux-react-hook"
 
 const Navbar = styled.div`
   background: ${props => props.theme.color.dark};
@@ -98,6 +99,8 @@ const Profile = styled.div`
 `
 
 export default () => {
+  const account = useMappedState(state => state.account.account)
+
   return (
     <Navbar>
       <NavbarContainer>
@@ -107,8 +110,8 @@ export default () => {
           <NavLink to="/images" name="Images"/>
         </Nav>
         <Profile>
-          Rémi Caumette
-          <img title="Avatar" alt="Avatar" src="https://avatars2.githubusercontent.com/u/32649258?v=4"/>
+          {account.name}
+          <img title="Avatar" alt="Avatar" src={account.avatarUrl}/>
         </Profile>
       </NavbarContainer>
     </Navbar>

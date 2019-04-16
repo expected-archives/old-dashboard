@@ -34,9 +34,9 @@ const columns = [
   {
     title: "Name",
     key: "name",
-    render: (name: any) => (
+    render: (data: IContainer) => (
       <>
-        {name}
+        {data.name}
       </>
     ),
   },
@@ -47,14 +47,14 @@ const columns = [
   {
     title: "Created",
     key: "createdAt",
-    render: (createdAt: any) => <TimeAgo date={createdAt} minPeriod={10}/>,
+    render: (data: IContainer) => <TimeAgo date={data.createdAt} minPeriod={10}/>,
   },
   {
     title: "Tags",
     key: "tags",
-    render: (tags: any) => (
+    render: (data: IContainer) => (
       <>
-        {tags.map((tag: any, i: number) => (
+        {data.tags.map((tag: any, i: number) => (
           <Tag key={i}>{tag}</Tag>
         ))}
       </>

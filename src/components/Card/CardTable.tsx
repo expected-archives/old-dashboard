@@ -1,17 +1,17 @@
 import React, { ReactNode } from "react"
 import { styled } from "../../style"
 
-interface IColumn {
+interface IColumn<T> {
   title: string
   key: string
   align?: "left" | "center" | "right"
-  render?: (data: any) => ReactNode
+  render?: (data: T) => ReactNode
 }
 
 interface IProps<T> {
   onRowClick?: (data: T) => any
   dataSource: T[] | undefined
-  columns: IColumn[]
+  columns: IColumn<T>[]
 }
 
 const Table = styled.table`
@@ -57,14 +57,14 @@ export default <T, >({ columns, dataSource = [], onRowClick }: IProps<T>) => {
         </tr>
       </thead>
       <tbody>
-        {dataSource.map((data: any, index) => (
+        {dataSource.map((data, index) => (
           <tr key={index} onClick={onClick(data)}>
             {columns.map(({ key, align, render }, index) => (
               <td key={index} style={{
                 textAlign: align || "left",
                 verticalAlign: "middle",
               }}>
-                {render ? render(data[key]) : data[key]}
+                {render ? render(data) : (data as any)[key]}
               </td>
             ))}
           </tr>

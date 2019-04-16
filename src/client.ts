@@ -1,13 +1,13 @@
 import axios from "axios"
 
 export interface IAccount {
-  id: string;
-  name: string;
-  email: string;
-  avatarUrl: string;
-  apiKey: string;
-  admin: boolean;
-  createdAt: Date;
+  id: string
+  name: string
+  email: string
+  avatarUrl: string
+  apiKey: string
+  admin: boolean
+  createdAt: Date
 }
 
 export interface IContainer {
@@ -37,6 +37,16 @@ export interface CreateContainerRequest {
   tags: string[]
 }
 
+export interface IImage {
+  id: string
+  name: string
+  tag: string
+  layers: number
+  size: number
+  digest: string
+  createdAt: Date
+}
+
 const remapFields = (obj: any, fields: any): any =>
   Object.entries(obj)
     .map(([key, value]) => [fields[key] || key, value])
@@ -50,6 +60,15 @@ const toAccount = (data: object): IAccount => {
   })
   account.createdAt = new Date(account.createdAt)
   return account
+}
+
+const toImage = (data: object): IImage => {
+  const image = remapFields(data, {
+    image_id: "id",
+    created_at: "createdAt",
+  })
+  image.createdAt = new Date(image.createdAt)
+  return image
 }
 
 const toContainer = (data: object): IContainer => {
@@ -120,3 +139,12 @@ export const getContainerPlans = (): Promise<IContainerPlan[]> =>
       }
       return res.data.plans
     })
+
+export const getImages = (): Promise<IImage[]> =>
+  client.get("/v1/images").then((res) => {
+    if (res.status !== 200) {
+      throw new Error(res.data.message)
+    }
+    console.log(res.data.images)
+    return res.data.images.map((data: object) => toImage(data))
+  })

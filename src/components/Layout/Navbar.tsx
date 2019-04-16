@@ -3,6 +3,7 @@ import { Link, Route } from "react-router-dom"
 import { styled } from "../../style"
 import { Container } from "../Responsive"
 import { useMappedState } from "redux-react-hook"
+import { Dropdown, DropdownButton, DropdownContent, DropdownItem } from "../Dropdown"
 
 const Navbar = styled.div`
   background: ${props => props.theme.color.dark};
@@ -87,8 +88,11 @@ const NavLink = ({ to, exact, name }: INavLinkProps) => {
   )
 }
 
-const Profile = styled.div`
+const ProfileDropdown = styled(Dropdown)`
   align-self: center;
+`
+
+const Profile = styled(DropdownButton.withComponent("div"))`
   color: rgba(255, 255, 255, 0.5);
   
   img {
@@ -96,10 +100,26 @@ const Profile = styled.div`
     height: 32px;
     border-radius: 5px;
   }
+  
+  &::after {
+    margin-left: .4em;
+    vertical-align: 0;
+  }
 `
 
 export default () => {
   const account = useMappedState(state => state.account.account)
+
+  const overlay = () => (
+    <DropdownContent style={{ minWidth: "100%" }}>
+      <DropdownItem>
+        <Link to="/account">Account</Link>
+      </DropdownItem>
+      <DropdownItem>
+        <Link to="/billing">Billing</Link>
+      </DropdownItem>
+    </DropdownContent>
+  )
 
   return (
     <Navbar>
@@ -109,10 +129,12 @@ export default () => {
           <NavLink to="/containers" name="Containers"/>
           <NavLink to="/images" name="Images"/>
         </Nav>
-        <Profile>
-          {account.name}
-          <img title="Avatar" alt="Avatar" src={account.avatarUrl}/>
-        </Profile>
+        <ProfileDropdown overlay={overlay}>
+          <Profile>
+            {account.name}
+            <img title="Avatar" alt="Avatar" src={account.avatarUrl}/>
+          </Profile>
+        </ProfileDropdown>
       </NavbarContainer>
     </Navbar>
   )

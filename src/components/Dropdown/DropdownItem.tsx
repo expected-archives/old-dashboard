@@ -11,4 +11,12 @@ export default styled.div`
   white-space: nowrap;
   background-color: transparent;
   border: 0;
+  
+  a:hover {
+    text-decoration: none;
+  }
+  
+  &:hover {
+    background: ${props => props.theme.color.greyLight};
+  }
 `

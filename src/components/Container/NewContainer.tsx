@@ -3,7 +3,9 @@ import { Header } from "../Layout"
 import { AutocompleteInput, Button, Form, FormGroup, FormSection, Input, TagInput } from "../Form"
 import { Col, Container, Row } from "../Responsive"
 import { Plan, PlanTable } from "./Plan"
-import { createContainer, CreateContainerRequest, getContainerPlans, IContainerPlan } from "../../client"
+import { container } from "../../client"
+
+interface IContainerPlan {}
 
 type Action =
   { type: "SET_LOADING", loading: boolean } |
@@ -12,8 +14,14 @@ type Action =
 
 interface IState {
   loading: boolean
-  form: CreateContainerRequest,
+  form: container.CreateContainerRequest
   plans: IContainerPlan[]
+  error?: string
+  formError?: {
+    name: string
+    image: string
+    tags: string
+  }
 }
 
 const reducer = (state: IState, action: Action) => {
@@ -53,18 +61,18 @@ export default () => {
     plans: [],
   })
 
-  useEffect(() => {
-    getContainerPlans()
-      .then(plans => dispatch({ type: "SET_PLANS", plans }))
-      .finally(() => dispatch({ type: "SET_LOADING", loading: false }))
-    // .catch(error => )
-  }, [])
+  // useEffect(() => {
+  //   container.()
+  //     .then(plans => dispatch({ type: "SET_PLANS", plans }))
+  //     .finally(() => dispatch({ type: "SET_LOADING", loading: false }))
+  //   // .catch(error => )
+  // }, [])
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 
     dispatch({ type: "SET_LOADING", loading: true })
-    createContainer(state.form)
+    container.createContainer(state.form)
       .then(console.log)
       .catch(console.error)
       .finally(() => dispatch({ type: "SET_LOADING", loading: false }))
@@ -76,15 +84,16 @@ export default () => {
 
       <Container>
         <Form onSubmit={handleSubmit} loading={state.loading}>
+          {state.error && <p>{state.error}</p>}
           <FormSection name="Basic"
                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
-            <FormGroup name="Name">
+            <FormGroup name="Name" error={state.formError && state.formError.name}>
               <Input type="text" placeholder="my-container" name="name"
                      onChange={(event) => dispatch({ type: "SET_FORM_VALUE", key: "name", value: event.target.value })}
                      autoComplete="off"/>
             </FormGroup>
 
-            <FormGroup name="Image">
+            <FormGroup name="Image" error={state.formError && state.formError.image}>
               <AutocompleteInput placeholder="nginx:latest" name="image"
                                  suggestions={[
                                    "hello", "world",
@@ -98,7 +107,7 @@ export default () => {
                                  })}/>
             </FormGroup>
 
-            <FormGroup name="Tags"
+            <FormGroup name="Tags" error={state.formError && state.formError.tags}
                        description="This is how others will learn about the project, so make it good!">
               <TagInput placeholder={"type tags here"} suggestions={["hello", "world", "hello world", "hai!"]}
                         onChange={(tags) => dispatch({ type: "SET_FORM_VALUE", key: "tags", value: tags })}/>
@@ -109,14 +118,7 @@ export default () => {
                        description=" do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
             <PlanTable>
               <tbody>
-                {state.plans && state.plans.map((plan, index) => (
-                  <Plan key={index}>
-                    <td>{plan.name}</td>
-                    <td>{plan.cpu} vCPU</td>
-                    <td>{plan.memory}MB</td>
-                    <td>${plan.price}</td>
-                  </Plan>
-                ))}
+
               </tbody>
             </PlanTable>
           </FormSection>
@@ -133,3 +135,12 @@ export default () => {
     </>
   )
 }
+
+// {state.plans && state.plans.map((plan, index) => (
+//   <Plan key={index}>
+//     <td>{plan.name}</td>
+//     <td>{plan.cpu} vCPU</td>
+//     <td>{plan.memory}MB</td>
+//     <td>${plan.price}</td>
+//   </Plan>
+// ))}

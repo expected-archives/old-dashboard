@@ -4,12 +4,17 @@ import { Footer, Navbar } from "./Layout"
 import { ListContainer, NewContainer } from "./Container"
 import { ListImage } from "./Image"
 import { Account } from "./Account"
-import { getAccount } from "../client"
+import { account } from "../client"
 import { usePromise } from "../hooks"
 import { useDispatch } from "redux-react-hook"
 
 export default () => {
-  const { data, loading, error } = usePromise(() => getAccount(), [])
+  const { data, loading, error } = usePromise(async () => {
+    const res = await account.getAccount() as account.AccountResponse
+    if (res.account) {
+      return res.account
+    }
+  }, [])
   const dispatch = useDispatch()
 
   if (data) {

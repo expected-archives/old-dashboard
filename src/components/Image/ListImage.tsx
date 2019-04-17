@@ -2,13 +2,13 @@ import React from "react"
 import TimeAgo from "react-timeago"
 import { Header } from "../Layout"
 import { usePromise } from "../../hooks"
-import { getImages, ImageSummary } from "../../client"
 import { Loader } from "../Loader"
 import { Card, CardBody, CardTable } from "../Card"
 import { Container } from "../Responsive"
 import { styled } from "../../style"
 import { Dropdown, DropdownButton, DropdownContent, DropdownItem } from "../Dropdown"
 import { useMappedState } from "redux-react-hook"
+import { image } from "../../client"
 
 const NoImage = styled(CardBody)`
   h3 {
@@ -32,7 +32,7 @@ const NoImage = styled(CardBody)`
 const columns = [
   {
     title: "Name",
-    render: (data: ImageSummary) => (
+    render: (data: image.ImageSummary) => (
       <>
         {data.name}:{data.tag}
       </>
@@ -40,7 +40,7 @@ const columns = [
   },
   {
     title: "URL",
-    render: (data: ImageSummary) => (
+    render: (data: image.ImageSummary) => (
       <>
         registry.expected.sh/{data.namespaceId}/{data.name}:{data.tag}
       </>
@@ -48,7 +48,7 @@ const columns = [
   },
   {
     title: "Last push",
-    render: (data: ImageSummary) => <TimeAgo date={data.lastPush} minPeriod={10}/>,
+    render: (data: image.ImageSummary) => <TimeAgo date={data.lastPush} minPeriod={10}/>,
   },
   {
     title: "",
@@ -73,7 +73,12 @@ const columns = [
 ]
 
 export default () => {
-  const { loading, data, error } = usePromise(() => getImages(), [])
+  const { loading, data, error } = usePromise(async () => {
+    const res = await image.getImages() as image.ListImageResponse
+    if (res.images) {
+      return res.images
+    }
+  }, [])
   const account = useMappedState(state => state.account.account)
 
   return (
@@ -88,7 +93,7 @@ export default () => {
           {data && (
             <Card>
               {data.length ? (
-                <CardTable<ImageSummary> columns={columns} dataSource={data}
+                <CardTable<image.ImageSummary> columns={columns} dataSource={data}
                                    onRowClick={(data) => console.log(data)}/>
               ) : (
                 <NoImage>

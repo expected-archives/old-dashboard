@@ -1,7 +1,7 @@
 import React from "react"
 import TimeAgo from "react-timeago"
+import { container } from "../../client"
 import { usePromise } from "../../hooks"
-import { getContainers, IContainer } from "../../client"
 import { Header } from "../Layout"
 import { Container } from "../Responsive"
 import { Card, CardTable } from "../Card"
@@ -22,7 +22,7 @@ const Tag = styled.div`
 const columns = [
   {
     title: "Name",
-    render: (data: IContainer) => (
+    render: (data: container.Container) => (
       <>
         {data.name}
       </>
@@ -34,11 +34,11 @@ const columns = [
   },
   {
     title: "Created",
-    render: (data: IContainer) => <TimeAgo date={data.createdAt} minPeriod={10}/>,
+    render: (data: container.Container) => <TimeAgo date={data.createdAt} minPeriod={10}/>,
   },
   {
     title: "Tags",
-    render: (data: IContainer) => (
+    render: (data: container.Container) => (
       <>
         {data.tags.map((tag: any, i: number) => (
           <Tag key={i}>{tag}</Tag>
@@ -69,7 +69,12 @@ const columns = [
 ]
 
 export default () => {
-  const { loading, data, error } = usePromise(() => getContainers(), [])
+  const { loading, data, error } = usePromise(async () => {
+    const res = await container.getContainers() as container.ListContainerResponse
+    if (res.containers) {
+      return res.containers
+    }
+  }, [])
 
   return (
     <>
@@ -86,8 +91,8 @@ export default () => {
         <Loader loading={loading}>
           {data && (
             <Card>
-              <CardTable<IContainer> columns={columns} dataSource={data}
-                                     onRowClick={(data) => console.log(data)}/>
+              <CardTable<container.Container> columns={columns} dataSource={data}
+                                              onRowClick={(data) => console.log(data)}/>
             </Card>
           )}
         </Loader>

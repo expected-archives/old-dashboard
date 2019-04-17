@@ -1,10 +1,10 @@
-import { IAccount } from "../client"
+import { account } from "../client"
 
 type Action =
-  { type: "SET_ACCOUNT", account: IAccount }
+  { type: "SET_ACCOUNT", account: account.Account }
 
 interface IState {
-  account: IAccount | undefined
+  account: account.Account | undefined
 }
 
 const INITIAL_STATE: IState = {

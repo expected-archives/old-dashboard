@@ -3,7 +3,7 @@ import { styled } from "../../style"
 import { Loader } from "../Loader"
 
 interface IProps {
-  onSubmit?: (event: FormEvent<HTMLFormElement>) => void
+  onSubmit?: (event: FormEvent<HTMLFormElement>) => any
   loading?: boolean
   children: ReactNode
 }

@@ -1,18 +1,18 @@
 import React, { useState } from "react"
-import { regenerateApiKey, syncAccount } from "../../client"
 import { Header } from "../Layout"
 import { Button, FormGroup, FormSection, Input } from "../Form"
 import { Col, Container, Row } from "../Responsive"
 import { useDispatch, useMappedState } from "redux-react-hook"
+import client from "../../client"
 
 export default () => {
   const account = useMappedState(state => state.account.account)
   const dispatch = useDispatch()
   const [reveal, setReveal] = useState<boolean>(false)
-  const [apiError, setApiError] = useState<Error | undefined>()
+  const [apiError, setApiError] = useState<string | undefined>()
 
   const regenerateApiKeyHandler = () => {
-    regenerateApiKey()
+    client.regenerateApiKey()
       .then((data) => {
         dispatch({ type: "SET_ACCOUNT", account: data })
         document.cookie = `token=${data.apiKey}`
@@ -23,7 +23,7 @@ export default () => {
   }
 
   const syncAccountHandler = () => {
-    syncAccount()
+    client.syncAccount()
       .then((data) => {
         dispatch({ type: "SET_ACCOUNT", account: data })
         setApiError(undefined)
@@ -38,7 +38,7 @@ export default () => {
       <Container>
         {apiError && (
           <div className="alert alert-danger">
-            {apiError.message}
+            {apiError}
           </div>
         )}
         <FormSection name="Profile"

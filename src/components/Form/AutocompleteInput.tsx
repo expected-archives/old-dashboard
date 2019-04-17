@@ -45,16 +45,16 @@ export default ({ name, onChange, suggestions, placeholder = "", suggestionRende
   const [id] = useState('_' + Math.random().toString(36).substr(2, 9))
 
   useEffect(() => {
-    const focusOut = (event: any) => {
-      hideCompletion()
-      event.preventDefault()
-    }
-    document.addEventListener("click", focusOut)
-    window.addEventListener("resize", focusOut)
-    return () => {
-      document.removeEventListener("click", focusOut)
-      window.removeEventListener("resize", focusOut)
-    }
+    // const focusOut = (event: any) => {
+    //   hideCompletion()
+    //   event.preventDefault()
+    // }
+    // document.addEventListener("click", focusOut)
+    // window.addEventListener("resize", focusOut)
+    // return () => {
+    //   document.removeEventListener("click", focusOut)
+    //   window.removeEventListener("resize", focusOut)
+    // }
   })
 
 

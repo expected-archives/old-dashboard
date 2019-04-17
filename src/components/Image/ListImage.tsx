@@ -1,12 +1,12 @@
 import React from "react"
+import TimeAgo from "react-timeago"
 import { Header } from "../Layout"
 import { usePromise } from "../../hooks"
-import { getImages, IImage } from "../../client"
+import { getImages, ImageSummary } from "../../client"
 import { Loader } from "../Loader"
 import { Card, CardBody, CardTable } from "../Card"
 import { Container } from "../Responsive"
 import { styled } from "../../style"
-import TimeAgo from "react-timeago"
 import { Dropdown, DropdownButton, DropdownContent, DropdownItem } from "../Dropdown"
 import { useMappedState } from "redux-react-hook"
 
@@ -30,46 +30,28 @@ const NoImage = styled(CardBody)`
 `
 
 const columns = [
-  // {
-  //   render: () => (
-  //     <img src={require("./test.svg")} style={{
-  //       marginRight: 15,
-  //       border: "1px solid red",
-  //       borderRadius: "50%",
-  //       height: 42,
-  //       padding: 5,
-  //     }}/>
-  //   ),
-  // },
   {
     title: "Name",
-    key: "name",
-    render: (name: any) => (
+    render: (data: ImageSummary) => (
       <>
-        {name}
+        {data.name}:{data.tag}
       </>
     ),
   },
   {
-    title: "Image",
-    key: "image",
-  },
-  {
-    title: "Created",
-    key: "createdAt",
-    render: (createdAt: any) => <TimeAgo date={createdAt} minPeriod={10}/>,
-  },
-  {
-    title: "Tags",
-    key: "tags",
-    render: (tags: any) => (
+    title: "URL",
+    render: (data: ImageSummary) => (
       <>
+        registry.expected.sh/{data.namespaceId}/{data.name}:{data.tag}
       </>
     ),
+  },
+  {
+    title: "Last push",
+    render: (data: ImageSummary) => <TimeAgo date={data.lastPush} minPeriod={10}/>,
   },
   {
     title: "",
-    key: "",
     render: () => {
       const overlay = () => (
         <DropdownContent>
@@ -90,7 +72,6 @@ const columns = [
   },
 ]
 
-// <CardTable<IImage> columns={columns} dataSource={data}/>
 export default () => {
   const { loading, data, error } = usePromise(() => getImages(), [])
   const account = useMappedState(state => state.account.account)
@@ -107,7 +88,8 @@ export default () => {
           {data && (
             <Card>
               {data.length ? (
-                <p>Ok</p>
+                <CardTable<ImageSummary> columns={columns} dataSource={data}
+                                   onRowClick={(data) => console.log(data)}/>
               ) : (
                 <NoImage>
                   <h3>Push your first image</h3>

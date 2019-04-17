@@ -1,51 +1,87 @@
-import React from "react"
+import React, { FormEvent, useEffect, useReducer } from "react"
 import { Header } from "../Layout"
-import { AutocompleteInput, Button, Form, FormGroup, FormSection, Input, Select, TagInput } from "../Form"
+import { AutocompleteInput, Button, Form, FormGroup, FormSection, Input, TagInput } from "../Form"
 import { Col, Container, Row } from "../Responsive"
-import { useForm, usePromise } from "../../hooks"
-import { getContainerPlans } from "../../client"
-import { styled } from "../../style"
+import { Plan, PlanTable } from "./Plan"
+import { createContainer, CreateContainerRequest, getContainerPlans, IContainerPlan } from "../../client"
 
-const test = () => new Promise((resolve, reject) => setTimeout(resolve, 4000))
+type Action =
+  { type: "SET_LOADING", loading: boolean } |
+  { type: "SET_FORM_VALUE", key: string, value: any } |
+  { type: "SET_PLANS", plans: IContainerPlan[] }
 
-const PlanTable = styled.table`
-  width: 100%;
-`
+interface IState {
+  loading: boolean
+  form: CreateContainerRequest,
+  plans: IContainerPlan[]
+}
 
-const Plan = styled.tr`
-  border: 1px solid ${props => props.theme.color.grey};
-  border-radius: 0.25rem;
-  
-  td {
-    padding: 0.5rem 1rem;
+const reducer = (state: IState, action: Action) => {
+  switch (action.type) {
+    case "SET_LOADING":
+      return {
+        ...state,
+        loading: action.loading,
+      }
+    case "SET_FORM_VALUE":
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          [action.key]: action.value,
+        },
+      }
+    case "SET_PLANS":
+      return {
+        ...state,
+        plans: action.plans,
+      }
+    default:
+      return state
   }
-`
+}
 
 export default () => {
-  const { data, loading: load } = usePromise(() => Promise.all([
-    getContainerPlans(),
-  ]), [])
-
-  const { loading, error, handleChange, handleSubmit, dispatch, values } = useForm({
-    name: "",
-    image: "",
-    size: "",
-    tags: "",
-  }, async (values) => {
-    // await test()
+  const [state, dispatch] = useReducer(reducer, {
+    loading: true,
+    form: {
+      name: "",
+      image: "",
+      size: "64",
+      tags: [],
+    },
+    plans: [],
   })
+
+  useEffect(() => {
+    getContainerPlans()
+      .then(plans => dispatch({ type: "SET_PLANS", plans }))
+      .finally(() => dispatch({ type: "SET_LOADING", loading: false }))
+    // .catch(error => )
+  }, [])
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault()
+
+    dispatch({ type: "SET_LOADING", loading: true })
+    createContainer(state.form)
+      .then(console.log)
+      .catch(console.error)
+      .finally(() => dispatch({ type: "SET_LOADING", loading: false }))
+  }
 
   return (
     <>
       <Header preTitle="Containers" title="Create a new container"/>
 
       <Container>
-        <Form onSubmit={handleSubmit} loading={loading && load}>
+        <Form onSubmit={handleSubmit} loading={state.loading}>
           <FormSection name="Basic"
                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
             <FormGroup name="Name">
               <Input type="text" placeholder="my-container" name="name"
-                     onChange={handleChange} autoComplete="off"/>
+                     onChange={(event) => dispatch({ type: "SET_FORM_VALUE", key: "name", value: event.target.value })}
+                     autoComplete="off"/>
             </FormGroup>
 
             <FormGroup name="Image">
@@ -55,14 +91,17 @@ export default () => {
                                    "hello world", "hai!",
                                    "Super", "Supra!", "Sjikl",
                                  ]}
-                                 onChange={(a) => console.log("image:", a.target.value)}/>
+                                 onChange={(event) => dispatch({
+                                   type: "SET_FORM_VALUE",
+                                   key: "image",
+                                   value: event.target.value,
+                                 })}/>
             </FormGroup>
 
             <FormGroup name="Tags"
                        description="This is how others will learn about the project, so make it good!">
-              <TagInput placeholder={"type tags here"}
-                        suggestions={["hello", "world", "hello world", "hai!"]}
-                        onChange={(a) => console.log("tags:", a)}/>
+              <TagInput placeholder={"type tags here"} suggestions={["hello", "world", "hello world", "hai!"]}
+                        onChange={(tags) => dispatch({ type: "SET_FORM_VALUE", key: "tags", value: tags })}/>
             </FormGroup>
           </FormSection>
 
@@ -70,7 +109,7 @@ export default () => {
                        description=" do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
             <PlanTable>
               <tbody>
-                {data && data[0].map((plan, index) => (
+                {state.plans && state.plans.map((plan, index) => (
                   <Plan key={index}>
                     <td>{plan.name}</td>
                     <td>{plan.cpu} vCPU</td>
@@ -84,7 +123,7 @@ export default () => {
 
           <Row justifyContent="flex-end">
             <Col medium={12} large={10} extraLarge={8}>
-              <Button color="green" block>
+              <Button color="green" block type="submit">
                 Create
               </Button>
             </Col>

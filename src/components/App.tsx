@@ -15,7 +15,7 @@ export default () => {
   if (data) {
     dispatch({ type: "SET_ACCOUNT", account: data })
   } else if (error) {
-    window.location.href = process.env.AUTH_URL || "http://localhost:3002"
+    window.location.href = process.env.AUTH_URL || "http://localhost:3002/oauth/github"
   }
 
   return loading ? (

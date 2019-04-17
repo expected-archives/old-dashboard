@@ -93,12 +93,14 @@ const ProfileDropdown = styled(Dropdown)`
 `
 
 const Profile = styled(DropdownButton.withComponent("div"))`
+  cursor: pointer;
   color: rgba(255, 255, 255, 0.5);
+  user-select: none;
   
   img {
-    margin-left: 15px;
+    margin-left: 1rem;
     height: 32px;
-    border-radius: 5px;
+    border-radius: 0.25rem;
   }
   
   &::after {
@@ -111,7 +113,7 @@ export default () => {
   const account = useMappedState(state => state.account.account)
 
   const overlay = () => (
-    <DropdownContent style={{ minWidth: "100%" }}>
+    <DropdownContent style={{ minWidth: "100%", top: 8 }}>
       <DropdownItem>
         <Link to="/account">Account</Link>
       </DropdownItem>

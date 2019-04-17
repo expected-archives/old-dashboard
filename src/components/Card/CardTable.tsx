@@ -1,12 +1,13 @@
 import React, { ReactNode } from "react"
 import { styled } from "../../style"
 
-interface IColumn<T> {
-  title: string
-  key: string
-  align?: "left" | "center" | "right"
-  render?: (data: T) => ReactNode
-}
+type IColumn<T> =
+  {
+    title: string
+    align?: "left" | "center" | "right"
+    key?: string
+    render?: (data: T) => ReactNode
+  }
 
 interface IProps<T> {
   onRowClick?: (data: T) => any
@@ -59,12 +60,12 @@ export default <T, >({ columns, dataSource = [], onRowClick }: IProps<T>) => {
       <tbody>
         {dataSource.map((data, index) => (
           <tr key={index} onClick={onClick(data)}>
-            {columns.map(({ key, align, render }, index) => (
+            {columns.map((column, index) => (
               <td key={index} style={{
-                textAlign: align || "left",
+                textAlign: column.align || "left",
                 verticalAlign: "middle",
               }}>
-                {render ? render(data) : (data as any)[key]}
+                {column.render ? column.render(data) : (data as any)[column.key as any]}
               </td>
             ))}
           </tr>

@@ -20,20 +20,8 @@ const Tag = styled.div`
 `
 
 const columns = [
-  // {
-  //   render: () => (
-  //     <img src={require("./test.svg")} style={{
-  //       marginRight: 15,
-  //       border: "1px solid red",
-  //       borderRadius: "50%",
-  //       height: 42,
-  //       padding: 5,
-  //     }}/>
-  //   ),
-  // },
   {
     title: "Name",
-    key: "name",
     render: (data: IContainer) => (
       <>
         {data.name}
@@ -46,12 +34,10 @@ const columns = [
   },
   {
     title: "Created",
-    key: "createdAt",
     render: (data: IContainer) => <TimeAgo date={data.createdAt} minPeriod={10}/>,
   },
   {
     title: "Tags",
-    key: "tags",
     render: (data: IContainer) => (
       <>
         {data.tags.map((tag: any, i: number) => (
@@ -62,7 +48,6 @@ const columns = [
   },
   {
     title: "",
-    key: "",
     render: () => {
       const overlay = () => (
         <DropdownContent>

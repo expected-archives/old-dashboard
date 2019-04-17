@@ -37,14 +37,11 @@ export interface CreateContainerRequest {
   tags: string[]
 }
 
-export interface IImage {
-  id: string
+export interface ImageSummary {
   name: string
   tag: string
-  layers: number
-  size: number
-  digest: string
-  createdAt: Date
+  namespaceId: string
+  lastPush: Date
 }
 
 const remapFields = (obj: any, fields: any): any =>
@@ -62,14 +59,11 @@ const toAccount = (data: object): IAccount => {
   return account
 }
 
-const toImage = (data: object): IImage => {
-  const image = remapFields(data, {
-    image_id: "id",
-    created_at: "createdAt",
+const toImageSummary = (data: object): ImageSummary =>
+  remapFields(data, {
+    namespace_id: "namespaceId",
+    last_push: "lastPush",
   })
-  image.createdAt = new Date(image.createdAt)
-  return image
-}
 
 const toContainer = (data: object): IContainer => {
   const container = remapFields(data, {
@@ -140,11 +134,10 @@ export const getContainerPlans = (): Promise<IContainerPlan[]> =>
       return res.data.plans
     })
 
-export const getImages = (): Promise<IImage[]> =>
+export const getImages = (): Promise<ImageSummary[]> =>
   client.get("/v1/images").then((res) => {
     if (res.status !== 200) {
       throw new Error(res.data.message)
     }
-    console.log(res.data.images)
-    return res.data.images.map((data: object) => toImage(data))
+    return res.data.images.map((data: object) => toImageSummary(data))
   })

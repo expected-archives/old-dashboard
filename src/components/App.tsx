@@ -1,33 +1,67 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Redirect, Route, Switch } from "react-router-dom"
 import { Footer, Navbar } from "./Layout"
 import { ListContainer, NewContainer } from "./Container"
 import { ListImage } from "./Image"
 import { Account } from "./Account"
-import { account } from "../client"
-import { usePromise } from "../hooks"
 import { useDispatch } from "redux-react-hook"
+import client from "../client"
 
 export default () => {
-  const { data, loading, error } = usePromise(async () => {
-    const res = await account.getAccount() as account.AccountResponse
-    if (res.account) {
-      return res.account
-    }
-  }, [])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | undefined>()
   const dispatch = useDispatch()
 
-  if (data) {
-    dispatch({ type: "SET_ACCOUNT", account: data })
-  } else if (error) {
-    window.location.href = process.env.AUTH_URL || "http://localhost:3002/oauth/github"
+  useEffect(() => {
+    let _cancelled = false
+
+    client.getAccount()
+      .then((res) => {
+        if (_cancelled) {
+          return
+        }
+        if (res.error) {
+          if (res.status === 403) {
+            window.location.href = process.env.AUTH_URL || "http://localhost:3002/oauth/github"
+          } else {
+            setError(res.error.message)
+          }
+        } else {
+          dispatch({ type: "SET_ACCOUNT", account: res.data })
+        }
+      })
+      .catch((error) => {
+        if (_cancelled) {
+          return
+        }
+        setError(error.message)
+      })
+      .finally(() => {
+        if (_cancelled) {
+          return
+        }
+        setLoading(false)
+      })
+    return () => {
+      _cancelled = true
+    }
+  }, [])
+
+  if (loading) {
+    return (
+      <p>
+        Loading...
+      </p>
+    )
   }
 
-  return loading ? (
-    <p>
-      Loading...
-    </p>
-  ) : (
+  if (error) {
+    return (
+      <p>Error: {error}</p>
+    )
+  }
+
+  return (
     <>
       <Navbar/>
 

@@ -19,10 +19,15 @@ export const remapFields = (obj: any, fields: any): any =>
     .map(([key, value]) => [fields[key] || key, value])
     .reduce((prev, [key, value]) => ({ ...prev, [key]: value }), {})
 
-export interface ErrorResponse {
-  message: string
-  errors?: object
+export interface ApiResponse<T> {
+  status: number
+  data?: T
+  error?: {
+    message: string
+    fields?: object
+  }
 }
+
 
 export default { ...account }
 

@@ -1,4 +1,4 @@
-import { client, ErrorResponse, remapFields } from "./index"
+import { ApiResponse, client, remapFields } from "./index"
 
 export interface ImageSummary {
   name: string
@@ -13,14 +13,10 @@ const toImageSummary = (data: object): ImageSummary =>
     last_push: "lastPush",
   })
 
-export interface ListImageResponse {
-  images: ImageSummary[]
-}
-
-export const getImages = (): Promise<ListImageResponse | ErrorResponse> =>
+export const getImages = (): Promise<ApiResponse<ImageSummary[]>> =>
   client.get("/v1/images").then((res) => {
     if (res.status !== 200) {
-      return res.data
+      return { status: res.status, error: res.data }
     }
-    return { images: res.data.images.map((data: object) => toImageSummary(data)) }
+    return { status: res.status, data: res.data.images.map((data: object) => toImageSummary(data)) }
   })

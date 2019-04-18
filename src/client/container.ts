@@ -1,4 +1,4 @@
-import { client, ErrorResponse, remapFields } from "./index"
+import { ApiResponse, client, remapFields } from "./index"
 
 export interface Container {
   id: string
@@ -19,21 +19,13 @@ const toContainer = (data: object): Container => {
   return container
 }
 
-export interface ContainerResponse {
-  container: Container
-}
-
-export interface ListContainerResponse {
-  containers: Container[]
-}
-
-export const getContainers = (): Promise<ListContainerResponse | ErrorResponse> =>
+export const getContainers = (): Promise<ApiResponse<Container[]>> =>
   client.get("/v1/containers")
     .then((res) => {
       if (res.status !== 200) {
-        return res.data
+        return { status: res.status, error: res.data }
       }
-      return { containers: res.data.containers.map((data: object) => toContainer(data)) }
+      return { status: res.status, data: res.data.containers.map((data: object) => toContainer(data)) }
     })
 
 export interface CreateContainerRequest {
@@ -43,11 +35,11 @@ export interface CreateContainerRequest {
   tags: string[]
 }
 
-export const createContainer = (req: CreateContainerRequest): Promise<ContainerResponse | ErrorResponse> =>
+export const createContainer = (req: CreateContainerRequest): Promise<ApiResponse<Container>> =>
   client.post("/v1/containers", req)
     .then((res) => {
       if (res.status !== 200) {
-        return res.data
+        return { status: res.status, error: res.data }
       }
-      return { container: res.data.container }
+      return { status: res.status, data: toContainer(res.data.container) }
     })

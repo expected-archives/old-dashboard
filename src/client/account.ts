@@ -1,4 +1,4 @@
-import { ErrorResponse, remapFields, client } from "./index"
+import { ApiResponse, client, remapFields } from "./index"
 
 export interface Account {
   id: string
@@ -8,10 +8,6 @@ export interface Account {
   apiKey: string
   admin: boolean
   createdAt: Date
-}
-
-export interface AccountResponse {
-  account: Account
 }
 
 const toAccount = (data: object): Account => {
@@ -24,29 +20,29 @@ const toAccount = (data: object): Account => {
   return account
 }
 
-export const getAccount = (): Promise<AccountResponse | ErrorResponse> =>
+export const getAccount = (): Promise<ApiResponse<Account>> =>
   client.get("/v1/account")
     .then((res) => {
       if (res.status !== 200) {
-        return res.data
+        return { status: res.status, error: res.data }
       }
-      return { account: toAccount(res.data.account) }
+      return { status: res.status, data: toAccount(res.data.account) }
     })
 
-export const syncAccount = (): Promise<AccountResponse | ErrorResponse> =>
+export const syncAccount = (): Promise<ApiResponse<Account>> =>
   client.post("/v1/account/sync")
     .then((res) => {
       if (res.status !== 200) {
-        return res.data
+        return { status: res.status, error: res.data }
       }
-      return { account: toAccount(res.data.account) }
+      return { status: res.status, data: toAccount(res.data.account) }
     })
 
-export const regenerateApiKey = (): Promise<AccountResponse | ErrorResponse> =>
+export const regenerateApiKey = (): Promise<ApiResponse<Account>> =>
   client.post("/v1/account/regenerate_apikey")
     .then((res) => {
       if (res.status !== 200) {
-        return res.data
+        return { status: res.status, error: res.data }
       }
-      return { account: toAccount(res.data.account) }
+      return { status: res.status, data: toAccount(res.data.account) }
     })

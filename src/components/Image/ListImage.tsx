@@ -1,14 +1,13 @@
-import React from "react"
+import React, { useEffect, useReducer } from "react"
 import TimeAgo from "react-timeago"
 import { Header } from "../Layout"
-import { usePromise } from "../../hooks"
 import { Loader } from "../Loader"
 import { Card, CardBody, CardTable } from "../Card"
 import { Container } from "../Responsive"
 import { styled } from "../../style"
 import { Dropdown, DropdownButton, DropdownContent, DropdownItem } from "../Dropdown"
 import { useMappedState } from "redux-react-hook"
-import { image } from "../../client"
+import client from "../../client"
 
 const NoImage = styled(CardBody)`
   h3 {
@@ -72,28 +71,74 @@ const columns = [
   },
 ]
 
+type Action =
+  { type: "SET_IMAGES", images: client.ImageSummary[] } |
+  { type: "SET_LOADING", loading: boolean } |
+  { type: "SET_ERROR", error: string }
+
+interface IState {
+  loading: boolean
+  images: client.ImageSummary[]
+  error?: string
+}
+
+const reducer = (state: IState, action: Action) => {
+  switch (action.type) {
+    case "SET_LOADING":
+      return {
+        ...state,
+        loading: action.loading,
+      }
+    case "SET_IMAGES":
+      return {
+        ...state,
+        images: action.images,
+      }
+    case "SET_ERROR":
+      return {
+        ...state,
+        error: action.error,
+      }
+    default:
+      return state
+  }
+}
+
 export default () => {
-  const { loading, data, error } = usePromise(async () => {
-    const res = await image.getImages() as image.ListImageResponse
-    if (res.images) {
-      return res.images
-    }
-  }, [])
   const account = useMappedState(state => state.account.account)
+  const [state, dispatch] = useReducer(reducer, {
+    loading: true,
+    images: [],
+  })
+
+  useEffect(() => {
+    dispatch({ type: "SET_LOADING", loading: true })
+
+    client.getImages()
+      .then((res) => {
+        if (res.error) {
+          dispatch({ type: "SET_ERROR", error: res.error.message })
+        } else if (res.data) {
+          dispatch({ type: "SET_IMAGES", images: res.data })
+        }
+      })
+      .catch((error) => dispatch({ type: "SET_ERROR", error: error.message }))
+      .finally(() => dispatch({ type: "SET_LOADING", loading: false }))
+  }, [])
 
   return (
     <>
       <Header title="Images" preTitle="Overview"/>
 
       <Container>
-        {error && (
-          <p>Error: {error.message}...</p>
+        {state.error && (
+          <p>Error: {state.error}...</p>
         )}
-        <Loader loading={loading}>
-          {data && (
+        <Loader loading={state.loading}>
+          {state.images && (
             <Card>
-              {data.length ? (
-                <CardTable<image.ImageSummary> columns={columns} dataSource={data}
+              {state.images.length ? (
+                <CardTable<image.ImageSummary> columns={columns} dataSource={state.images}
                                    onRowClick={(data) => console.log(data)}/>
               ) : (
                 <NoImage>

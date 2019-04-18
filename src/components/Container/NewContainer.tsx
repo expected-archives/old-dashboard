@@ -1,11 +1,12 @@
-import React, { FormEvent, useEffect, useReducer } from "react"
+import React, { FormEvent, useReducer } from "react"
 import { Header } from "../Layout"
 import { AutocompleteInput, Button, Form, FormGroup, FormSection, Input, TagInput } from "../Form"
 import { Col, Container, Row } from "../Responsive"
-import { Plan, PlanTable } from "./Plan"
-import { container } from "../../client"
+import { PlanTable } from "./Plan"
+import client from "../../client"
 
-interface IContainerPlan {}
+interface IContainerPlan {
+}
 
 type Action =
   { type: "SET_LOADING", loading: boolean } |
@@ -14,7 +15,7 @@ type Action =
 
 interface IState {
   loading: boolean
-  form: container.CreateContainerRequest
+  form: client.CreateContainerRequest
   plans: IContainerPlan[]
   error?: string
   formError?: {
@@ -72,7 +73,7 @@ export default () => {
     event.preventDefault()
 
     dispatch({ type: "SET_LOADING", loading: true })
-    container.createContainer(state.form)
+    client.createContainer(state.form)
       .then(console.log)
       .catch(console.error)
       .finally(() => dispatch({ type: "SET_LOADING", loading: false }))

@@ -1,7 +1,6 @@
-import React from "react"
+import React, { useEffect, useReducer } from "react"
 import TimeAgo from "react-timeago"
-import { container } from "../../client"
-import { usePromise } from "../../hooks"
+import client from "../../client"
 import { Header } from "../Layout"
 import { Container } from "../Responsive"
 import { Card, CardTable } from "../Card"
@@ -22,7 +21,7 @@ const Tag = styled.div`
 const columns = [
   {
     title: "Name",
-    render: (data: container.Container) => (
+    render: (data: client.Container) => (
       <>
         {data.name}
       </>
@@ -34,11 +33,11 @@ const columns = [
   },
   {
     title: "Created",
-    render: (data: container.Container) => <TimeAgo date={data.createdAt} minPeriod={10}/>,
+    render: (data: client.Container) => <TimeAgo date={data.createdAt} minPeriod={10}/>,
   },
   {
     title: "Tags",
-    render: (data: container.Container) => (
+    render: (data: client.Container) => (
       <>
         {data.tags.map((tag: any, i: number) => (
           <Tag key={i}>{tag}</Tag>
@@ -68,12 +67,58 @@ const columns = [
   },
 ]
 
+type Action =
+  { type: "SET_CONTAINERS", containers: client.Container[] } |
+  { type: "SET_LOADING", loading: boolean } |
+  { type: "SET_ERROR", error: string }
+
+interface IState {
+  loading: boolean
+  containers: client.Container[]
+  error?: string
+}
+
+const reducer = (state: IState, action: Action) => {
+  switch (action.type) {
+    case "SET_LOADING":
+      return {
+        ...state,
+        loading: action.loading,
+      }
+    case "SET_CONTAINERS":
+      return {
+        ...state,
+        containers: action.containers,
+      }
+    case "SET_ERROR":
+      return {
+        ...state,
+        error: action.error,
+      }
+    default:
+      return state
+  }
+}
+
 export default () => {
-  const { loading, data, error } = usePromise(async () => {
-    const res = await container.getContainers() as container.ListContainerResponse
-    if (res.containers) {
-      return res.containers
-    }
+  const [state, dispatch] = useReducer(reducer, {
+    loading: true,
+    containers: [],
+  })
+
+  useEffect(() => {
+    dispatch({ type: "SET_LOADING", loading: true })
+
+    client.getContainers()
+      .then((res) => {
+        if (res.error) {
+          dispatch({ type: "SET_ERROR", error: res.error.message })
+        } else if (res.data) {
+          dispatch({ type: "SET_CONTAINERS", containers: res.data })
+        }
+      })
+      .catch((error) => dispatch({ type: "SET_ERROR", error: error.message }))
+      .finally(() => dispatch({ type: "SET_LOADING", loading: false }))
   }, [])
 
   return (
@@ -85,14 +130,14 @@ export default () => {
       </Header>
 
       <Container>
-        {error && (
-          <p>Error: {error.message}...</p>
+        {state.error && (
+          <p>Error: {state.error}...</p>
         )}
-        <Loader loading={loading}>
-          {data && (
+        <Loader loading={state.loading}>
+          {state.containers && (
             <Card>
-              <CardTable<container.Container> columns={columns} dataSource={data}
-                                              onRowClick={(data) => console.log(data)}/>
+              <CardTable<client.Container> columns={columns} dataSource={state.containers}
+                                           onRowClick={(data) => console.log(data)}/>
             </Card>
           )}
         </Loader>

@@ -27,8 +27,6 @@ export interface ApiResponse<T> {
     fields?: object
   }
 }
-
-
-export default { ...account }
-
-export { container, account, image }
+const a = { ...container, ...account, ...image }
+console.log(a)
+export default a

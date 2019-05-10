@@ -1,5 +1,13 @@
-import { styled } from "../../style"
+import React, {Component, ReactNode} from "react";
 
-export default styled.div`
-  padding: 1rem 1.5rem;
-`
+interface IProps {
+  children: ReactNode
+}
+
+export default class CardBody extends Component<IProps, {}> {
+  render = () => (
+    <div className="card-body">
+      {this.props.children}
+    </div>
+  )
+}

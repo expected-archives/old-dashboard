@@ -1,0 +1,17 @@
+.header {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-grey);
+  margin-bottom: 2rem;
+
+  .header-pretitle {
+    color: var(--color-grey-dark);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .header-title {
+    font-weight: 700;
+    margin-bottom: 0;
+  }
+}

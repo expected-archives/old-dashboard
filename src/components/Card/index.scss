@@ -1,0 +1,56 @@
+.card {
+  margin-bottom: 1.5rem;
+  border-color: var(--color-grey);
+  box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+
+  .card-header {
+    margin-bottom: 0;
+    padding: 1rem 1.5rem;
+    color: inherit;
+    border-bottom: 1px solid var(--color-grey);
+    background-color: transparent;
+
+    h4 {
+      margin: 0;
+    }
+  }
+
+  .card-table {
+    table {
+      margin-bottom: 0;
+    }
+
+    thead {
+      background-color: transparent;
+
+      th {
+        padding: 0.75rem 1.5rem;
+        color: var(--color-primary);
+        font-size: 0.9375rem;
+        font-weight: 700;
+        border: none;
+      }
+    }
+
+    tbody td {
+      font-size: 0.9375rem;
+      padding: 0.9rem 1.5rem;
+    }
+
+    .table th {
+      border: none;
+      border-bottom: 1px solid var(--color-grey);
+    }
+
+    .table-hover tbody tr:hover {
+      transition: all 0.3s, height 0s;
+      background: var(--color-grey-light);
+    }
+  }
+
+  .card-header + .card-table th {
+    color: var(--color-grey-dark);
+    font-size: 0.625rem;
+    background: var(--color-grey-light);
+  }
+}

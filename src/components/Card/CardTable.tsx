@@ -1,76 +1,49 @@
-import React, { ReactNode } from "react"
-import { styled } from "../../style"
+import React, {Component, ReactNode} from "react";
 
-type IColumn<T> =
-  {
-    title: string
-    align?: "left" | "center" | "right"
-    key?: string
-    render?: (data: T) => ReactNode
-  }
+interface IColumn {
+  title: string
+  key: string
+  align?: "left" | "center" | "right"
+  render?: (data: any) => ReactNode
+}
 
 interface IProps<T> {
   onRowClick?: (data: T) => any
-  dataSource: T[] | undefined
-  columns: IColumn<T>[]
+  dataSource: T[]
+  columns: IColumn[]
 }
 
-const Table = styled.table`
-  width: 100%;
-  
-  th {
-    color: ${props => props.theme.color.dark};
-    font-weight: 600;
-    border-bottom: 1px solid ${props => props.theme.color.grey};
-    font-size: 0.9375rem;
-    background: transparent;
-    padding: 0.8rem;
-  }
-  
-  tbody > tr:hover {
-    transition: all 0.3s, height 0s;
-    background: ${props => props.theme.color.greyLight};
-  }
-  
-  td {
-    padding: 1rem 0.8rem;
-    border-top: 1px solid ${props => props.theme.color.grey};
-  }
-  
-`
-
-export default <T, >({ columns, dataSource = [], onRowClick }: IProps<T>) => {
-  const onClick = (data: T) => () => {
-    if (onRowClick) {
-      onRowClick(data)
+export default class CardTable<T> extends Component<IProps<T>, {}> {
+  onClick = (data: T) => () => {
+    if (this.props.onRowClick) {
+      this.props.onRowClick(data)
     }
   }
 
-  return (
-    <Table>
-      <thead>
-        <tr>
-          {columns.map(({ title: columnTitle, align }, index) => (
-            <th key={index} style={{ textAlign: align || "left" }}>
-              {columnTitle}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {dataSource.map((data, index) => (
-          <tr key={index} onClick={onClick(data)}>
-            {columns.map((column, index) => (
-              <td key={index} style={{
-                textAlign: column.align || "left",
-                verticalAlign: "middle",
-              }}>
-                {column.render ? column.render(data) : (data as any)[column.key as any]}
-              </td>
+  render = () => (
+    <div className="card-table table-responsive">
+      <table className="table table-hover">
+        <thead>
+          <tr>
+            {this.props.columns.map(({title: columnTitle, align}, index) => (
+              <th key={index} style={{textAlign: align || "left"}}>
+                {columnTitle}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </Table>
+        </thead>
+        <tbody>
+          {this.props.dataSource.map((data: any, index) => (
+            <tr key={index} onClick={this.onClick(data)}>
+              {this.props.columns.map(({key, align, render}, index) => (
+                <td key={index} style={{textAlign: align || "left"}}>
+                  {render ? render(data[key]) : data[key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
